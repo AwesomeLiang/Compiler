@@ -57,18 +57,41 @@ Parser::Parser()
   items.clear();
   first.clear();
   grammar.push_back("S->E");
-  grammar.push_back("E->CC");
-  grammar.push_back("C->cC");
-  grammar.push_back("C->d");
+  grammar.push_back("E->E+T");
+  grammar.push_back("E->T");
+  //grammar.push_back("E->T+");
+  grammar.push_back("T->T*F");
+  grammar.push_back("T->F");
+  grammar.push_back("F->(E)");
+  grammar.push_back("F->id");
+  first["S"] = "(/id/";
+  first["E"] = "(/id/";
+  first["T"] = "(/id/";
+  first["F"] = "(/id/";
+  first["id"] = "id/";
+  first["("] = "(/";
+  first[")"] = ")/";
+  first["*"] = "*/";
+  first["+"] = "+/";
   character.push_back("S");
   character.push_back("E");
-  character.push_back("C");
-  character.push_back("c");
-  character.push_back("d");
+  character.push_back("T");
+  character.push_back("F");
+
+  character.push_back("(");
+  character.push_back(")");
+  character.push_back("*");
+  character.push_back("id");
+  character.push_back("+");
   character.push_back("#");
   kind.push_back(1);
   kind.push_back(1);
   kind.push_back(1);
+  kind.push_back(1);
+  
+  kind.push_back(0);
+  kind.push_back(0);
+  kind.push_back(0);
   kind.push_back(0);
   kind.push_back(0);
   kind.push_back(0);
@@ -624,12 +647,12 @@ item Parser::CLOSURE(item t)
                 int n = 0;
                 int temp_m = 0;
 
-                for (int m = 0; m < (int)t.tag_reduced[i].length(); ++m)
+                for (int m = 0; m < (int)t.tag_reduced[p].length(); ++m)
                 {
                   string temp_str_tag;
-                  if (t.tag_reduced[i][m] == '/')
+                  if (t.tag_reduced[p][m] == '/')
                   {
-                    temp_str_tag = t.tag_reduced[i].substr(temp_m, m - temp_m);
+                    temp_str_tag = t.tag_reduced[p].substr(temp_m, m - temp_m);
                     if (temp_str_tag == temp_str_first)
                     {
                       flag5 = 1;
@@ -638,36 +661,7 @@ item Parser::CLOSURE(item t)
                     temp_m = m + 1;
                   }
                 }
-                /*
-                for (int m = 0; m < (int)t.tag_reduced[i].length(); )
-                {
-                if (t.tag_reduced[i][m] == str_first[n])
-                {
-                ++m;
-                ++n;
-                }
-                else
-                {
-                temp_m++;
-                m = temp_m;
-                n = 0;
-                }
-                if (n == (int)str_first.length())
-                {
-                if (t.tag_reduced[i][m] == '/')//匹配成功
-                {
-                flag = 1;
-                break;
-                }
-                else
-                {
-                temp_m++;
-                m = temp_m;
-                n = 0;
-                }
-                }
-                }
-                */
+              
                 
                 if (flag5 == 0)
                 {
