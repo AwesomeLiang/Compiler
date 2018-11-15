@@ -1,8 +1,1 @@
-include<math.h>
-int main()
-{
-
-	int c;
-	c = a + b;
-} 
-#
+((Aa+Bb-(776))*(88.2/3))#

@@ -459,7 +459,55 @@ Token Lexer::scan()
     }
     // if (readch('=')) return token_make(NE, lexeme_str_make("!=", l), tok); else return token_make(NOT, lexeme_str_make("!", l), tok);
   }
-  if (peek == '.' || peek == '(' || peek == ')' || peek == '[' || peek == ']' || peek == '{' || peek == '}' || peek == ';' || peek == ',' || peek == '+' || peek == '-')
+  if (peek == '.')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, POINT);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == '(')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, LSP);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == ')')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, RSP);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == '[')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, LMP);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == ']')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, RMP);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == '{')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, LBP);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == '}')
   {
     string str;
     str += peek;
@@ -467,7 +515,54 @@ Token Lexer::scan()
     peek = ' ';
     return tok;
   }
-
+  if (peek == ';')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, SEMICOLON);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == ',')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, COMMA);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == '+')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, ADD);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == '-')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, SUB);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == '*')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, MUL);
+    peek = ' ';
+    return tok;
+  }
+  if (peek == '/')
+  {
+    string str;
+    str += peek;
+    insert_delimiter(str, tok, l, DIV);
+    peek = ' ';
+    return tok;
+  }
   if (isDigit(peek))
   {
     string str;
@@ -700,6 +795,7 @@ Token Lexer::scan()
   if (peek == '#')
   {
     goon = 0;
+    return token_make((tag)6, lexeme_str_make("#", l), tok, -1);
   }
 
 

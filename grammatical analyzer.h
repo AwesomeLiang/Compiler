@@ -83,7 +83,7 @@ using namespace std;
 typedef struct ppair
 {
   int state;
-  string V;
+  int V;
   bool operator < (const ppair &x)const
   {
     if (state < x.state)
@@ -101,10 +101,28 @@ typedef struct ppair
   }
 }index,key;
 
+struct ip
+{
+  int index_grammar;
+  int pos_point;
+  
+  bool operator == (const ip &x)const
+  {
+    if (index_grammar == x.index_grammar && pos_point == x.pos_point)
+    {
+
+      return true;
+    }
+
+    return false;
+  }
+
+};
+
  struct item
 {
-  vector<string> grammar_item;
-  vector<string> tag_reduced;
+  vector<ip> grammar_item;
+  vector<vector<int>> tag_reduced;
  
 };
 
@@ -117,24 +135,25 @@ public:
   void action();  //自动机
   map<index, key> table_analyse;  //分析表
   string ch; //输入部分 可能用char
-  vector<string> grammar; // 文法
+  vector<vector<int>> grammar; // 文法
   vector<string> character; // 文法符号
   vector<int> kind; // 文法符号的类别：0终结符和 1非终结符
   stack<int> stack_state;
   stack<string> stack_op;
   vector<item> items;
-  map<string,string> first;
-  vector<string> cash;
+  map<int,vector<int>> first;
+  vector<int> cash;
   void items_make();
   void table_make();
   item CLOSURE(item t);
-  item GOTO(int index, string str);
+  item GOTO(int index, int index_str);
   bool in_items(item t);
   bool in_items(item t,int &n);
   bool next_str(string &str, int from,int k);
   bool next_str(string &str, int from);
   bool match(string aim,string str,int from);
-  string mfirst(string str,string add_strz);
-  string make_first(int num);
+  vector<int> mfirst(int from_first, int index_g, vector<int> add_tag);
+  vector<int> make_first(int num);
+  bool Parser::in_vector(int aim, vector<int> v);
 };
 

@@ -1,5 +1,6 @@
 #include "LL.h"
 
+//在词法分析器最后返回token串的时候碰到＃也用到了这个tag6
 
 LL::LL()
 {
@@ -51,28 +52,34 @@ LL::LL()
   temp_grammar.push_back(0);
   grammar.push_back(temp_grammar);
   */
-  line.push_back("i");
-  line.push_back("b");
-  line.push_back("i");
-  line.push_back("#");
+
   
-  character.push_back("E");//0
-  character.push_back("T");//1
-  character.push_back("Z");//2
-  character.push_back("F");//3
-  character.push_back("P");//4
-  character.push_back("a");//5
-  character.push_back("b");//6
-  character.push_back("(");//7
-  character.push_back(")");//8
-  character.push_back("i");//9
-  character.push_back("$");//10
-  character.push_back("#");//11
+  
+  character.push_back((tag)0);//0  E
+  character.push_back((tag)1);//1  T 
+  character.push_back((tag)2);//2  Z 
+  character.push_back((tag)3);//3  F
+  character.push_back((tag)4);//4  P
+  character.push_back(ADD);//5
+  character.push_back(MUL);//6
+  character.push_back(LSP);//7
+  character.push_back(RSP);//8
+  character.push_back(NUM);//9
+  character.push_back((tag)5);//10  $
+  character.push_back((tag)6);//11  #  在词法分析器最后返回token串的时候碰到＃也用到了这个tag6
+  character.push_back(SUB);//12
+  character.push_back(DIV);//13
+  character.push_back(REAL);//14
+  character.push_back(ID);//15
   kind.push_back(1);
   kind.push_back(1);
   kind.push_back(1);
   kind.push_back(1);
   kind.push_back(1);
+  kind.push_back(0);
+  kind.push_back(0);
+  kind.push_back(0);
+  kind.push_back(0);
   kind.push_back(0);
   kind.push_back(0);
   kind.push_back(0);
@@ -93,6 +100,12 @@ LL::LL()
   grammar.push_back(temp_grammar);
   temp_grammar.clear();
   temp_grammar.push_back(2);
+  temp_grammar.push_back(12);
+  temp_grammar.push_back(1);
+  temp_grammar.push_back(2);
+  grammar.push_back(temp_grammar);
+  temp_grammar.clear();
+  temp_grammar.push_back(2);
   temp_grammar.push_back(10);
   grammar.push_back(temp_grammar);
   temp_grammar.clear();
@@ -108,11 +121,25 @@ LL::LL()
   grammar.push_back(temp_grammar);
   temp_grammar.clear();
   temp_grammar.push_back(4);
+  temp_grammar.push_back(13);
+  temp_grammar.push_back(3);
+  temp_grammar.push_back(4);
+  grammar.push_back(temp_grammar);
+  temp_grammar.clear();
+  temp_grammar.push_back(4);
   temp_grammar.push_back(10);
   grammar.push_back(temp_grammar);
   temp_grammar.clear();
   temp_grammar.push_back(3);
   temp_grammar.push_back(9);
+  grammar.push_back(temp_grammar);
+  temp_grammar.clear();
+  temp_grammar.push_back(3);
+  temp_grammar.push_back(14);
+  grammar.push_back(temp_grammar);
+  temp_grammar.clear();
+  temp_grammar.push_back(3);
+  temp_grammar.push_back(15);
   grammar.push_back(temp_grammar);
   temp_grammar.clear();
   temp_grammar.push_back(3);
@@ -202,9 +229,7 @@ LL::LL()
 
   }
  
-  if (action() == 1)
-    cout << "yes";
-  else cout << "no";
+  
 }
 
 int LL::action()
@@ -212,12 +237,12 @@ int LL::action()
   int i;
   for ( i = 0; i < (int)character.size(); ++i)
   {
-    if (character[i] == "#")
+    if (character[i] == (tag)6)//#是6
       break;
   }
   stack_state.push(i);
   stack_state.push(0);
-    while (character[stack_state.top()] != "#" || line[pos] != "#")
+    while (character[stack_state.top()] != (tag)6 || line[pos] != (tag)6)
   {
     if (kind[stack_state.top()] == 0/*栈顶是终结符*/ && line[pos] == character[stack_state.top()])
     {
@@ -235,7 +260,7 @@ int LL::action()
         for (int i = (int)grammar[table_analyse[temp]].size() - 1; i >= 1; --i)
         { // 逆序压栈
           
-          if (character[grammar[table_analyse[temp]][i]] != "$")
+          if (character[grammar[table_analyse[temp]][i]] != (tag)5) //$是5
           {
             stack_state.push(grammar[table_analyse[temp]][i]);
           }
@@ -278,7 +303,7 @@ void LL::table_make()
       for (j = 0; j < (int)first[grammar[i][p]].size(); ++j)
       {
         //判断第i个文法的产生式右边第一个的first集合中是否存在空
-        if (character[first[grammar[i][p]][j]] == "$")
+        if (character[first[grammar[i][p]][j]] == tag(5))//5是$
         {
           
           flag = 1; // 有空的信号
@@ -290,7 +315,7 @@ void LL::table_make()
         
         for (int k = 0; k < (int)first[grammar[i][p]].size(); ++k)
         {
-          if (character[first[grammar[i][p]][k]] == "$")
+          if (character[first[grammar[i][p]][k]] == tag(5))//5是$
             continue;
           int flag1 = 0;
           for (int m = 0; m < (int)select[i].size(); ++m)
@@ -447,7 +472,7 @@ void LL::make_follow(int index)
           flag = 0;
           for (int k = 0; k < (int)first[grammar[i][p]].size(); ++k)
           {
-            if (character[first[grammar[i][p]][k]] == "$") // first集合中存在空
+            if (character[first[grammar[i][p]][k]] == (tag)5) // first集合中存在空 5是$
             {
              
               flag = 1;
@@ -506,7 +531,7 @@ void LL::join(vector<int> &f1, vector<int> f2)
         break;
       }
     }
-    if (flag == 0 && character[f2[i]] != "$")
+    if (flag == 0 && character[f2[i]] != tag(5))//5是$
     {
       f1.push_back(f2[i]);
     }

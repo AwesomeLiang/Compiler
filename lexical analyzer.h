@@ -14,6 +14,8 @@ using namespace std;
 6.字符。 value为‘a’
 */
 
+
+
 typedef enum
 {
   AND = 256, BASIC = 257, BREAK = 258, DO = 259, ELSE = 260,
@@ -23,8 +25,9 @@ typedef enum
   NUM = 276, REAL = 277, BITAND = 278, BITOR = 279, LT = 280,
   GT = 281, NOT = 282, ASSIGN = 283, ERROR = 284, LSP = 285,/*左小括号'(' */
   RSP = 286/*右小括号')' */, LMP = 287/*左中括号'{' */, RMP = 288/*右中括号'}' */,
-  RETURN = 289, Semicolon = 290,/*分号';' */ Comma = 291/*逗号*/, LBP = 292, RBP = 293,
-  CHAR = 294, STRING = 295,CH = 296,ADD = 297,SUB = 298,INCLUDE = 299,POINT = 300
+  RETURN = 289, SEMICOLON = 290,/*分号';' */ COMMA= 291/*逗号*/, LBP = 292, RBP = 293,
+  CHAR = 294, STRING = 295,CH = 296,ADD = 297,SUB = 298,INCLUDE = 299,POINT = 300,
+  MUL = 301, DIV = 302
 } tag;
 
 struct lexeme_value
