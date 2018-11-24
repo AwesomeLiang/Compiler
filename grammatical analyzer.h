@@ -134,12 +134,16 @@ public:
   Parser(); 
   void action();  //自动机
   map<index, key> table_analyse;  //分析表
-  string ch; //输入部分 可能用char
+
+  vector<int> line; //输入部分 可能用char
+  int pos;
+  int success;
+  int con;
   vector<vector<int>> grammar; // 文法
   vector<string> character; // 文法符号
   vector<int> kind; // 文法符号的类别：0终结符和 1非终结符
   stack<int> stack_state;
-  stack<string> stack_op;
+  stack<int> stack_op;
   vector<item> items;
   map<int,vector<int>> first;
   vector<int> cash;

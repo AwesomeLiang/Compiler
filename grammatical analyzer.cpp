@@ -45,21 +45,42 @@ Parser::Parser()
   kind.clear();
   items.clear();
   first.clear();
+  success = 0;
+  pos = 0;
+  con = 1;
   /**/
-
-
+  line.push_back(10);
+  line.push_back(10);
+  line.push_back(12);
+  line.push_back(6);
+  line.push_back(12);
+  line.push_back(11);
+  line.push_back(6);
+  line.push_back(12);
+  line.push_back(11);
+  line.push_back(6);
+  line.push_back(12);
+  line.push_back(9);
   character.push_back("S");//0  E
   character.push_back("E");//1  E
-  character.push_back("P");//2  E
+  character.push_back("T");//2  E
   character.push_back("Z");//3  E
-  character.push_back("T");//4  E
+  character.push_back("P");//4  E
   character.push_back("F");//5  E
   character.push_back("a");//6  E
   character.push_back("b");//7  E
   character.push_back("$");//8  E
   character.push_back("#");//9  E
-
-  
+  character.push_back("(");//10  E
+  character.push_back(")");//11 E
+  character.push_back("i");//12  E
+  /*
+  E -> T Z ① {I,(}
+  Z-> a T Z ② {a }|ε ③{),#}
+  T -> F P ④ {I,(}
+  P-> b F P ⑤{b}|ε⑥{a,),#}
+  F -> i ⑦{I} | ( E ) ⑧{(}
+  */
   kind.push_back(1);
   kind.push_back(1);
   kind.push_back(1);
@@ -71,7 +92,9 @@ Parser::Parser()
   kind.push_back(0);
   kind.push_back(0);
   kind.push_back(0);
- 
+  kind.push_back(0);
+  kind.push_back(0);
+  kind.push_back(0);
 
   vector<int> temp_grammar;
   temp_grammar.clear();
@@ -81,17 +104,28 @@ Parser::Parser()
   temp_grammar.clear();
   temp_grammar.push_back(1);
   temp_grammar.push_back(2);
+  temp_grammar.push_back(3);
+  grammar.push_back(temp_grammar);
+  temp_grammar.clear();
+  temp_grammar.push_back(3);
   temp_grammar.push_back(6);
+  temp_grammar.push_back(2);
+  temp_grammar.push_back(3);
+  grammar.push_back(temp_grammar);
+  temp_grammar.clear();
+  temp_grammar.push_back(3);
+  temp_grammar.push_back(8);
   grammar.push_back(temp_grammar);
   temp_grammar.clear();
   temp_grammar.push_back(2);
-  temp_grammar.push_back(3);
-  temp_grammar.push_back(4);
   temp_grammar.push_back(5);
+  temp_grammar.push_back(4);
   grammar.push_back(temp_grammar);
   temp_grammar.clear();
-  temp_grammar.push_back(3);
+  temp_grammar.push_back(4);
   temp_grammar.push_back(7);
+  temp_grammar.push_back(5);
+  temp_grammar.push_back(4);
   grammar.push_back(temp_grammar);
   temp_grammar.clear();
   temp_grammar.push_back(4);
@@ -99,15 +133,17 @@ Parser::Parser()
   grammar.push_back(temp_grammar);
   temp_grammar.clear();
   temp_grammar.push_back(5);
-  temp_grammar.push_back(8);
+  temp_grammar.push_back(12);
   grammar.push_back(temp_grammar);
   temp_grammar.clear();
-  temp_grammar.push_back(4);
-  temp_grammar.push_back(7);
+  temp_grammar.push_back(5);
+  temp_grammar.push_back(10);
+  temp_grammar.push_back(1);
+  temp_grammar.push_back(11);
   grammar.push_back(temp_grammar);
 
 
-
+  
   
  /*
  vector<int> temp_grammar;
@@ -180,44 +216,117 @@ Parser::Parser()
 void Parser::action()
 {
   /*
-  index temp;
-  temp.state = stack_state.top();
-  temp.V = ch;
-  string A;
-  switch (table_analyse[temp].V[0])
-  {
-  case 's': // move
-    stack_state.push(table_analyse[temp].state);
-    stack_op.push(ch);
-    break;
-  case 'r': // reduced  找到产生式，A->β ，连续弹栈length(β)次，接着把栈顶状态和A产生的新状态压入状态栈中，A压入符号栈中 当前输入符号不变
-    
-    int length;
-     // table_analyse[temp].state 这个代表第几个产生式 ,grammar[table_analyse[temp].state] 就代表产生式 grammar[table_analyse[temp].state].length-3就是产生式右部即β的长度（“是否占字节）
-    A = grammar[table_analyse[temp].state][0];
-    //！！！！！！！！！！！！！！！！！！
-    length = grammar[table_analyse[temp].state].length() - 3;//长度还有问题
-
-    for (int i = 0; i < length; ++i)
-    {
-      stack_state.pop();
-      stack_op.pop();
-    }
-    
-    temp.state = stack_state.top();
-    temp.V = A;
-    if (table_analyse[temp].V[0] != 's')
-      return;//error
-    stack_state.push(table_analyse[temp].state);
-    stack_op.push(A); // 考虑要不要压进去分隔符
-    break;
-  case 'a': // accept
-    break;
-  default:
-    //error
-    break;
-  }
+  没考虑空
   */
+  stack_state.push(0);
+  
+  while (pos <= (int)line.size() - 1 && con == 1)
+  {
+   
+    index temp_index;
+    
+    temp_index.state = stack_state.top();
+    temp_index.V = line[pos];
+    cout << "from" << temp_index.state ;
+    cout << " state:" << table_analyse[temp_index].state ;
+    cout << "str:" << line[pos]<<endl;
+    int A;
+    switch (table_analyse[temp_index].V)
+    {
+    case 997: // move
+      stack_state.push(table_analyse[temp_index].state);
+      cout << "state:" << table_analyse[temp_index].state  << endl;
+      stack_op.push(line[pos]);
+      pos++;
+      break;
+    case 999: // reduced  找到产生式，A->β ，连续弹栈length(β)次，接着把栈顶状态和A产生的新状态压入状态栈中，A压入符号栈中 当前输入符号不变
+      if (grammar[table_analyse[temp_index].state][1] != 8) // 8是$
+      {
+        int length;
+        // table_analyse[temp].state 这个代表第几个产生式 ,grammar[table_analyse[temp].state] 就代表产生式 grammar[table_analyse[temp].state].length-3就是产生式右部即β的长度（“是否占字节）
+        length = (int)grammar[table_analyse[temp_index].state].size() - 1;
+        A = grammar[table_analyse[temp_index].state][0];
+        //！！！！！！！！！！！！！！！！！！
+
+        for (int i = 0; i < length; ++i)
+        {
+          stack_state.pop();
+          stack_op.pop();
+        }
+
+
+
+        temp_index.state = stack_state.top();
+        temp_index.V = A;
+        cout << "new state1:" << temp_index.state<<"A" <<A<<endl;
+        if (table_analyse[temp_index].V != 997)
+        {
+          //error
+          success = 0;
+          con = 0;
+          break;
+        }
+
+        stack_state.push(table_analyse[temp_index].state);
+        cout << "new state2:" << table_analyse[temp_index].state << endl;
+        stack_op.push(A);
+      }
+      else
+      {
+        //要归约的产生式是A->空 不弹栈
+        
+        // table_analyse[temp].state 这个代表第几个产生式 ,grammar[table_analyse[temp].state] 就代表产生式 grammar[table_analyse[temp].state].length-3就是产生式右部即β的长度（“是否占字节）
+        int length;
+        length = (int)grammar[table_analyse[temp_index].state].size() - 1;
+        A = grammar[table_analyse[temp_index].state][0];
+        //！！！！！！！！！！！！！！！！！！
+
+        
+
+
+
+        temp_index.state = stack_state.top();
+        temp_index.V = A;
+        if (table_analyse[temp_index].V != 997)
+        {
+          //error
+          success = 0;
+          con = 0;
+          break;
+        }
+
+        stack_state.push(table_analyse[temp_index].state);
+        
+        stack_op.push(A);
+      }
+      break;
+    case 998: // accept
+      pos++;
+      success = 1;
+      break;
+    case 1000: // error
+      success = 0;
+      con = 0;
+      break;
+    default:
+      //error
+      success = 0;
+      con = 0;
+      break;
+    }
+    if (success == 1 && pos != (int)line.size() )
+    {
+      cout << "change";
+      success = 0;
+      break;
+    }
+      
+  }
+
+  if (success == 1)
+    cout << "yes"<<endl;
+  else cout << "no"<<endl;
+
 }
 
 void Parser::items_make()
@@ -291,7 +400,7 @@ void Parser::table_make()
         table_analyse[temp].state = 0;
 
       }
-      else if (items[i].grammar_item[j].pos_point == (int)grammar[items[i].grammar_item[j].index_grammar].size())
+      else if (items[i].grammar_item[j].pos_point == (int)grammar[items[i].grammar_item[j].index_grammar].size() || grammar[items[i].grammar_item[j].index_grammar][1] == 8)//8 是 $
       {
 
         index temp;
