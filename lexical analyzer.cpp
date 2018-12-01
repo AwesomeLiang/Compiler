@@ -1,4 +1,3 @@
-
 #include "lexical analyzer.h"
 #include<math.h>
 
@@ -661,14 +660,12 @@ Token Lexer::scan()
       }
     }
 
-    if (peek == '#')
-    {
-      goon = 0;
-    }
+    
 
     if (m == 1)
     {
       //实数
+      cout << "shishu" << endl;
       insert_real(val*1.0*power(10, t*n - p), tok, l, REAL);  return tok;
     }
     else
@@ -677,26 +674,7 @@ Token Lexer::scan()
       insert_num(val, tok, l, NUM);  return tok;
 
     }
-    /*
-    if (m == 1)
-    str = tostr(val);
-    else
-    {
-    str = tostr(val);
-    str += 'e';
-    if (t == 1)
-    {
-    str += '+';
-    str += tostr(n - p);
-    }
-
-    else
-    {
-    str += '-';
-    str += tostr(n + p);
-    }
-
-    }*/
+    
   }
 
   
@@ -721,10 +699,7 @@ Token Lexer::scan()
       str1 += peek;
       readch();
     }
-    if (peek == '#')
-    {
-      goon = 0;
-    }
+    
     //将缓冲区的字符串和关键字比较
     if (words.count(str1))
     {
@@ -795,7 +770,7 @@ Token Lexer::scan()
   if (peek == '#')
   {
     goon = 0;
-    return token_make((tag)6, lexeme_str_make("#", l), tok, -1);
+    return token_make(FINISH, lexeme_str_make("#", l), tok, -1);
   }
 
 

@@ -1,5 +1,16 @@
 #include "LL.h"
 
+quaternary make_sequence1(Token Op, Token Arg1, Token Arg2, Token Result)
+{
+  quaternary q;
+  q.op = Op;
+  q.arg1 = Arg1;
+  q.arg2 = Arg2;
+  q.result = Result;
+  return q;
+}
+
+
 //在词法分析器最后返回token串的时候碰到＃也用到了这个tag6
 
 LL::LL()
@@ -12,6 +23,7 @@ LL::LL()
   follow.clear();
   select.clear();
   pos = 0;
+  num = 0;
   character.clear();
   //"S->E" "E->Ta" "T->p"
   /*
@@ -66,11 +78,16 @@ LL::LL()
   character.push_back(RSP);//8
   character.push_back(NUM);//9
   character.push_back((tag)5);//10  $
-  character.push_back((tag)6);//11  #  在词法分析器最后返回token串的时候碰到＃也用到了这个tag6
+  character.push_back(FINISH);//11  #  在词法分析器最后返回token串的时候碰到＃也用到了这个tag6
   character.push_back(SUB);//12
   character.push_back(DIV);//13
   character.push_back(REAL);//14
   character.push_back(ID);//15
+  character.push_back((tag)16);//16用于+的function
+  character.push_back((tag)17);
+  character.push_back((tag)18);//18用于*的function
+  character.push_back((tag)19);//19用于/的function
+  character.push_back((tag)20);
   kind.push_back(1);
   kind.push_back(1);
   kind.push_back(1);
@@ -87,6 +104,11 @@ LL::LL()
   kind.push_back(0);
   kind.push_back(0);
   kind.push_back(0);
+  kind.push_back(2);
+  kind.push_back(3);
+  kind.push_back(4);
+  kind.push_back(5);
+  kind.push_back(6);
   vector<int> temp_grammar;
   temp_grammar.push_back(0);
   temp_grammar.push_back(1);
@@ -104,10 +126,12 @@ LL::LL()
   temp_grammar.push_back(1);
   temp_grammar.push_back(2);
   grammar.push_back(temp_grammar);
+
   temp_grammar.clear();
   temp_grammar.push_back(2);
   temp_grammar.push_back(10);
   grammar.push_back(temp_grammar);
+  
   temp_grammar.clear();
   temp_grammar.push_back(1);
   temp_grammar.push_back(3);
@@ -237,15 +261,24 @@ int LL::action()
   int i;
   for ( i = 0; i < (int)character.size(); ++i)
   {
-    if (character[i] == (tag)6)//#是6
+    if (character[i] == FINISH)//#是6
       break;
   }
   stack_state.push(i);
   stack_state.push(0);
-    while (character[stack_state.top()] != (tag)6 || line[pos] != (tag)6)
+  while (character[stack_state.top()] != FINISH || line[pos] != FINISH)
   {
     if (kind[stack_state.top()] == 0/*栈顶是终结符*/ && line[pos] == character[stack_state.top()])
     {
+      //在这里要对id等赋值
+      //如果栈顶的是id相消时
+      if (character[stack_state.top()] == NUM || character[stack_state.top()] == ID || character[stack_state.top()] == REAL)
+      {
+        
+        Token temp_token = token_line[pos];
+        infer.stack_infer.push(temp_token);
+      }
+
       stack_state.pop();
       pos++;
     }
@@ -259,14 +292,11 @@ int LL::action()
         stack_state.pop();
         for (int i = (int)grammar[table_analyse[temp]].size() - 1; i >= 1; --i)
         { // 逆序压栈
-          
+          infer.work_LL(table_analyse[temp],i, stack_state);
           if (character[grammar[table_analyse[temp]][i]] != (tag)5) //$是5
           {
             stack_state.push(grammar[table_analyse[temp]][i]);
           }
-         
-           
-          
         }
        
       }
@@ -276,6 +306,211 @@ int LL::action()
         cout << temp.state <<" "<< temp.V<<"1"<<endl;
         return 0;
       }
+    }
+    else if (kind[stack_state.top()] == 2)
+    {
+      
+      stack_state.pop();
+      Token arg2 = infer.stack_infer.top();
+      infer.stack_infer.pop();
+      Token arg1 = infer.stack_infer.top();
+      infer.stack_infer.pop();
+      Token op;
+      op.lexeme_type = ADD;
+      op.lexeme_val.str = "+";
+      Token result;
+      result.lexeme_type = ID;
+      result.lexeme_val.str = "temp";
+      result.lexeme_val.str += (char)(num + '0');
+      
+      num++;
+      infer.stack_infer.push(result);
+      infer.sequence_temp.push_back(make_sequence1(op, arg1, arg2, result));
+      cout << "< +,";
+      switch (arg1.lexeme_type)
+      {
+      case NUM:
+        cout << arg1.lexeme_val.num<<",";
+        break;
+      case REAL:
+        cout << arg1.lexeme_val.real << ",";
+        break;
+      case ID:
+        cout << arg1.lexeme_val.str << ",";
+        break;
+
+      default:
+        break;
+      }
+      switch (arg2.lexeme_type)
+      {
+      case NUM:
+        cout << arg2.lexeme_val.num << ",";
+        break;
+      case REAL:
+        cout << arg2.lexeme_val.real << ",";
+        break;
+      case ID:
+        cout << arg2.lexeme_val.str << ",";
+        break;
+
+      default:
+        break;
+      }
+      cout <<result.lexeme_val.str<< ">"<<endl;
+    }
+    else if (kind[stack_state.top()] == 3)
+    {
+
+      stack_state.pop();
+      Token arg2 = infer.stack_infer.top();
+      infer.stack_infer.pop();
+      Token arg1 = infer.stack_infer.top();
+      infer.stack_infer.pop();
+      Token op;
+      op.lexeme_type = SUB;
+      op.lexeme_val.str = "-";
+      Token result;
+      result.lexeme_type = ID;
+      result.lexeme_val.str = "temp";
+      result.lexeme_val.str += (char)(num + '0');
+      num++;
+      infer.stack_infer.push(result);
+      infer.sequence_temp.push_back(make_sequence1(op, arg1, arg2, result));
+      cout << "< -,";
+      switch (arg1.lexeme_type)
+      {
+      case NUM:
+        cout << arg1.lexeme_val.num << ",";
+        break;
+      case REAL:
+        cout << arg1.lexeme_val.real << ",";
+        break;
+      case ID:
+        cout << arg1.lexeme_val.str << ",";
+        break;
+
+      default:
+        break;
+      }
+      switch (arg2.lexeme_type)
+      {
+      case NUM:
+        cout << arg2.lexeme_val.num << ",";
+        break;
+      case REAL:
+        cout << arg2.lexeme_val.real << ",";
+        break;
+      case ID:
+        cout << arg2.lexeme_val.str << ",";
+        break;
+
+      default:
+        break;
+      }
+      cout << result.lexeme_val.str << ">" << endl;
+    }
+    else if (kind[stack_state.top()] == 4)
+    {
+
+      stack_state.pop();
+      Token arg2 = infer.stack_infer.top();
+      infer.stack_infer.pop();
+      Token arg1 = infer.stack_infer.top();
+      infer.stack_infer.pop();
+      Token op;
+      op.lexeme_type = MUL;
+      op.lexeme_val.str = "*";
+      Token result;
+      result.lexeme_type = ID;
+      result.lexeme_val.str = "temp";
+      result.lexeme_val.str += (char)(num + '0');
+      num++;
+      infer.stack_infer.push(result);
+      infer.sequence_temp.push_back(make_sequence1(op, arg1, arg2, result));
+      cout << "< *,";
+      switch (arg1.lexeme_type)
+      {
+      case NUM:
+        cout << arg1.lexeme_val.num << ",";
+        break;
+      case REAL:
+        cout << arg1.lexeme_val.real << ",";
+        break;
+      case ID:
+        cout << arg1.lexeme_val.str << ",";
+        break;
+
+      default:
+        break;
+      }
+      switch (arg2.lexeme_type)
+      {
+      case NUM:
+        cout << arg2.lexeme_val.num << ",";
+        break;
+      case REAL:
+        cout << arg2.lexeme_val.real << ",";
+        break;
+      case ID:
+        cout << arg2.lexeme_val.str << ",";
+        break;
+
+      default:
+        break;
+      }
+      cout << result.lexeme_val.str << ">" << endl;
+    }
+    else if (kind[stack_state.top()] == 5)
+    {
+
+      stack_state.pop();
+      Token arg2 = infer.stack_infer.top();
+      infer.stack_infer.pop();
+      Token arg1 = infer.stack_infer.top();
+      infer.stack_infer.pop();
+      Token op;
+      op.lexeme_type = DIV;
+      op.lexeme_val.str = "/";
+      Token result;
+      result.lexeme_type = ID;
+      result.lexeme_val.str = "temp";
+      result.lexeme_val.str += (char)(num + '0');
+      num++;
+      infer.stack_infer.push(result);
+      infer.sequence_temp.push_back(make_sequence1(op, arg1, arg2, result));
+      cout << "< /,";
+      switch (arg1.lexeme_type)
+      {
+      case NUM:
+        cout << arg1.lexeme_val.num << ",";
+        break;
+      case REAL:
+        cout << arg1.lexeme_val.real << ",";
+        break;
+      case ID:
+        cout << arg1.lexeme_val.str << ",";
+        break;
+
+      default:
+        break;
+      }
+      switch (arg2.lexeme_type)
+      {
+      case NUM:
+        cout << arg2.lexeme_val.num << ",";
+        break;
+      case REAL:
+        cout << arg2.lexeme_val.real << ",";
+        break;
+      case ID:
+        cout << arg2.lexeme_val.str << ",";
+        break;
+
+      default:
+        break;
+      }
+      cout << result.lexeme_val.str << ">" << endl;
     }
     else
     {

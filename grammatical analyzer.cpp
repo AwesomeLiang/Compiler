@@ -24,6 +24,7 @@ void join(vector<int> &f1, vector<int> f2)
     if (flag == 0)
     {
       f1.push_back(f2[i]);
+      
     }
   }
 }
@@ -37,113 +38,21 @@ void readch()
 Parser::Parser()
 {
   //将空定义成$
-  //还没有处理first （要能处理空）
-  // 0:S->E 1 : E->E + T 2 : T->T*F 3 : F->(E)4 : F->id
+  
+ 
   table_analyse.clear();
   grammar.clear();
   character.clear();
   kind.clear();
   items.clear();
   first.clear();
+  line.clear();
+  token_line.clear();
   success = 0;
   pos = 0;
   con = 1;
-  /**/
-  line.push_back(10);
-  line.push_back(10);
-  line.push_back(12);
-  line.push_back(6);
-  line.push_back(12);
-  line.push_back(11);
-  line.push_back(6);
-  line.push_back(12);
-  line.push_back(11);
-  line.push_back(6);
-  line.push_back(12);
-  line.push_back(9);
-  character.push_back("S");//0  E
-  character.push_back("E");//1  E
-  character.push_back("T");//2  E
-  character.push_back("Z");//3  E
-  character.push_back("P");//4  E
-  character.push_back("F");//5  E
-  character.push_back("a");//6  E
-  character.push_back("b");//7  E
-  character.push_back("$");//8  E
-  character.push_back("#");//9  E
-  character.push_back("(");//10  E
-  character.push_back(")");//11 E
-  character.push_back("i");//12  E
-  /*
-  E -> T Z ① {I,(}
-  Z-> a T Z ② {a }|ε ③{),#}
-  T -> F P ④ {I,(}
-  P-> b F P ⑤{b}|ε⑥{a,),#}
-  F -> i ⑦{I} | ( E ) ⑧{(}
-  */
-  kind.push_back(1);
-  kind.push_back(1);
-  kind.push_back(1);
-  kind.push_back(1);
-  kind.push_back(1);
-  kind.push_back(1);
-  
-  kind.push_back(0);
-  kind.push_back(0);
-  kind.push_back(0);
-  kind.push_back(0);
-  kind.push_back(0);
-  kind.push_back(0);
-  kind.push_back(0);
-
-  vector<int> temp_grammar;
-  temp_grammar.clear();
-  temp_grammar.push_back(0);
-  temp_grammar.push_back(1);
-  grammar.push_back(temp_grammar);
-  temp_grammar.clear();
-  temp_grammar.push_back(1);
-  temp_grammar.push_back(2);
-  temp_grammar.push_back(3);
-  grammar.push_back(temp_grammar);
-  temp_grammar.clear();
-  temp_grammar.push_back(3);
-  temp_grammar.push_back(6);
-  temp_grammar.push_back(2);
-  temp_grammar.push_back(3);
-  grammar.push_back(temp_grammar);
-  temp_grammar.clear();
-  temp_grammar.push_back(3);
-  temp_grammar.push_back(8);
-  grammar.push_back(temp_grammar);
-  temp_grammar.clear();
-  temp_grammar.push_back(2);
-  temp_grammar.push_back(5);
-  temp_grammar.push_back(4);
-  grammar.push_back(temp_grammar);
-  temp_grammar.clear();
-  temp_grammar.push_back(4);
-  temp_grammar.push_back(7);
-  temp_grammar.push_back(5);
-  temp_grammar.push_back(4);
-  grammar.push_back(temp_grammar);
-  temp_grammar.clear();
-  temp_grammar.push_back(4);
-  temp_grammar.push_back(8);
-  grammar.push_back(temp_grammar);
-  temp_grammar.clear();
-  temp_grammar.push_back(5);
-  temp_grammar.push_back(12);
-  grammar.push_back(temp_grammar);
-  temp_grammar.clear();
-  temp_grammar.push_back(5);
-  temp_grammar.push_back(10);
-  temp_grammar.push_back(1);
-  temp_grammar.push_back(11);
-  grammar.push_back(temp_grammar);
 
 
-  
   
  /*
  vector<int> temp_grammar;
@@ -212,13 +121,13 @@ Parser::Parser()
 
 }
 
-//没有控制词法分析与语法分析的交互，什么时候词法分析器送来下一个，什么时候语法分析停止
+
 void Parser::action()
 {
-  /*
-  没考虑空
-  */
+  
+  
   stack_state.push(0);
+  //stack_op.push(9);
   
   while (pos <= (int)line.size() - 1 && con == 1)
   {
@@ -226,20 +135,29 @@ void Parser::action()
     index temp_index;
     
     temp_index.state = stack_state.top();
-    temp_index.V = line[pos];
-    cout << "from" << temp_index.state ;
-    cout << " state:" << table_analyse[temp_index].state ;
-    cout << "str:" << line[pos]<<endl;
+   
+    int t;
+    for ( t = 0; t < (int)character.size(); ++t)
+    {
+      if (character[t] == line[pos])
+        break;
+    }
+    temp_index.V = t;
+   
     int A;
     switch (table_analyse[temp_index].V)
     {
     case 997: // move
+      
       stack_state.push(table_analyse[temp_index].state);
-      cout << "state:" << table_analyse[temp_index].state  << endl;
-      stack_op.push(line[pos]);
+      
+      stack_op.push(t);
       pos++;
       break;
     case 999: // reduced  找到产生式，A->β ，连续弹栈length(β)次，接着把栈顶状态和A产生的新状态压入状态栈中，A压入符号栈中 当前输入符号不变
+
+      infer.work(table_analyse[temp_index].state, token_line, pos);
+      
       if (grammar[table_analyse[temp_index].state][1] != 8) // 8是$
       {
         int length;
@@ -258,7 +176,7 @@ void Parser::action()
 
         temp_index.state = stack_state.top();
         temp_index.V = A;
-        cout << "new state1:" << temp_index.state<<"A" <<A<<endl;
+       
         if (table_analyse[temp_index].V != 997)
         {
           //error
@@ -268,7 +186,7 @@ void Parser::action()
         }
 
         stack_state.push(table_analyse[temp_index].state);
-        cout << "new state2:" << table_analyse[temp_index].state << endl;
+      
         stack_op.push(A);
       }
       else
@@ -299,6 +217,7 @@ void Parser::action()
         
         stack_op.push(A);
       }
+      
       break;
     case 998: // accept
       pos++;
@@ -316,7 +235,7 @@ void Parser::action()
     }
     if (success == 1 && pos != (int)line.size() )
     {
-      cout << "change";
+      
       success = 0;
       break;
     }
@@ -327,6 +246,15 @@ void Parser::action()
     cout << "yes"<<endl;
   else cout << "no"<<endl;
 
+}
+
+void Parser::init(vector<vector<int>> g, vector<tag> c, vector<int> k, vector<tag> l,vector<Token> t)
+{
+  grammar = g;
+  character = c;
+  kind = k;
+  line = l;
+  token_line = t;
 }
 
 void Parser::items_make()
@@ -352,7 +280,7 @@ void Parser::items_make()
     
     for (int j = 0; j < (int)character.size(); ++j)
     {
-      if (character[j] == "$")
+      if (character[j] == (tag)8)//tag(8)是$
         continue;
       temp = GOTO(order, j);
       
@@ -420,7 +348,7 @@ void Parser::table_make()
     }
     for (int j = 0; j < (int)character.size(); ++j)
     {
-      if (character[j] == "$")//$是空
+      if (character[j] == (tag)8)//tag(8)是$
         continue;
       item temp_item;
       index temp_index;
@@ -491,6 +419,7 @@ vector<int> Parser::mfirst(int from_first,int index_g,vector<int> add_tag)
           break;
         }
       }
+      
       join(mytag, temp_first);
       if (temp_flag == 0)
       {
@@ -501,7 +430,9 @@ vector<int> Parser::mfirst(int from_first,int index_g,vector<int> add_tag)
     }
     if (i == (int)grammar[index_g].size())
     {
+      
       //空拓展到了最后，说明要把addtag也加入到mytag中
+      
       join(mytag, add_tag);
     }
     return mytag;
@@ -514,6 +445,7 @@ vector<int> Parser::make_first(int num)
   
   string sfirst;
   vector<int> temp_first;
+  
   if (kind[num] == 0)
   {
     
@@ -571,13 +503,11 @@ vector<int> Parser::make_first(int num)
 item Parser::CLOSURE(item t)
 {
   //没有考虑点后是空的情况
-  int sum = (int) t.grammar_item.size();
-  
+  int sum = (int)t.grammar_item.size();
   int i = 0;
   while (sum)
   {
-    
-    
+
     //找到点的位置
     if (grammar[t.grammar_item[i].index_grammar][1] == 8)//8是$
     {
@@ -593,7 +523,7 @@ item Parser::CLOSURE(item t)
       continue;
     }
     int flag = 1;
-   
+
     int afterpoint = grammar[t.grammar_item[i].index_grammar][t.grammar_item[i].pos_point];
     if (kind[afterpoint] == 1)
     {
@@ -608,18 +538,10 @@ item Parser::CLOSURE(item t)
           vector<int> temp_tag;
           temp_tag.clear();
           int k;
-          for ( k = 0; k < (int)t.grammar_item.size(); ++k)
-          {
-            
-            if (t.grammar_item[k].index_grammar == temp_ip.index_grammar && t.grammar_item[k].pos_point == temp_ip.pos_point)
-            {
-              //判断新产生式是不是已经在项目集中，若在则不需要插入，只需要增加tag
-              
-              flag0 = 1;
-              break;
-
-            }
-          }
+          
+          
+          
+         
           //temp_tag的生成
           if (t.grammar_item[i].pos_point + 1 == grammar[t.grammar_item[i].index_grammar].size())
           {
@@ -629,36 +551,60 @@ item Parser::CLOSURE(item t)
           }
           else
           {
-            
-            
-            
+
+
+
 
             join(temp_tag, mfirst(t.grammar_item[i].pos_point + 1, t.grammar_item[i].index_grammar, t.tag_reduced[i]));
-            
-          }
-
-          if (flag0 == 1)
-          {
-            //新产生式子已经在项目集中，不用插入
-            //temp_tag 是需要插入到t.tag[k]中的
-            join( t.tag_reduced[k],temp_tag);
 
           }
-          else
+          
+
+          for (k = 0; k < (int)t.grammar_item.size(); ++k)
           {
-            //新产生式不在项目集中需要插入
+
+            if (t.grammar_item[k].index_grammar == temp_ip.index_grammar && t.grammar_item[k].pos_point == temp_ip.pos_point&&t.tag_reduced[k] == temp_tag )
+            {
+              //判断新产生式是不是已经在项目集中，若在则不需要插入，只需要增加tag
+              
+              flag0 = 1;
+              break;
+
+            }
+          }
+
+          if (flag0 != 1)
+          {
             t.grammar_item.push_back(temp_ip);
             t.tag_reduced.push_back(temp_tag);
             sum++;
+
           }
+         
+         
         }
       }
     }
-    i++;
-    sum--;
 
     
+
+    i++;
+    sum--;
   }
+  for (int k = (int)t.grammar_item.size() - 1; k >= 0; --k)
+  {
+    for (int m = 0; m < k; ++m)
+    {
+      if (t.grammar_item[m].index_grammar == t.grammar_item[k].index_grammar && t.grammar_item[m].pos_point == t.grammar_item[k].pos_point)
+      {
+        join(t.tag_reduced[m], t.tag_reduced[k]);
+        t.grammar_item.erase(t.grammar_item.begin() + k);
+        t.tag_reduced.erase(t.tag_reduced.begin() + k);
+        break;
+      }
+    }
+  }
+  
   return item(t);
 }
 
@@ -691,8 +637,7 @@ item Parser::GOTO(int index, int index_str)
    
   }
 
-
-
+  
   return item(CLOSURE(temp));
 }
 

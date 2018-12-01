@@ -4,6 +4,8 @@
 #include<map>
 #include<vector>
 #include<stack>
+#include"lexical analyzer.h"
+#include "semantic analyzer.h"
 using namespace std;
 
 //需要一个自动生成自动机的
@@ -101,6 +103,9 @@ typedef struct ppair
   }
 }index,key;
 
+
+
+
 struct ip
 {
   int index_grammar;
@@ -131,30 +136,32 @@ struct ip
 class Parser
 {
 public:
-  Parser(); 
-  void action();  //自动机
   map<index, key> table_analyse;  //分析表
-
-  vector<int> line; //输入部分 可能用char
+  vector<tag> line; //输入部分 可能用char
   int pos;
   int success;
   int con;
+
   vector<vector<int>> grammar; // 文法
-  vector<string> character; // 文法符号
+  vector<tag> character; // 文法符号
   vector<int> kind; // 文法符号的类别：0终结符和 1非终结符
   stack<int> stack_state;
   stack<int> stack_op;
   vector<item> items;
   map<int,vector<int>> first;
   vector<int> cash;
+  vector<Token> token_line;
+  Infer infer;
+
+  Parser();
+  void action(); 
+  void init(vector<vector<int>> g,vector<tag> c,vector<int> k,vector<tag> l,vector<Token> t);
   void items_make();
   void table_make();
   item CLOSURE(item t);
   item GOTO(int index, int index_str);
   bool in_items(item t);
   bool in_items(item t,int &n);
-  bool next_str(string &str, int from,int k);
-  bool next_str(string &str, int from);
   bool match(string aim,string str,int from);
   vector<int> mfirst(int from_first, int index_g, vector<int> add_tag);
   vector<int> make_first(int num);

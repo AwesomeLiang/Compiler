@@ -117,12 +117,15 @@
     <ClCompile Include="LL.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="recursion.cpp" />
+    <ClCompile Include="semantic analyzer.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="grammatical analyzer.h" />
     <ClInclude Include="lexical analyzer.h" />
     <ClInclude Include="LL.h" />
     <ClInclude Include="recursion.h" />
+    <ClInclude Include="semantic analyzer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

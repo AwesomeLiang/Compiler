@@ -5,6 +5,7 @@
 #include<vector>
 #include<stack>
 #include"lexical analyzer.h"
+#include"semantic analyzer.h"
 using namespace std;
 
 typedef struct pppair
@@ -35,6 +36,8 @@ public:
   map<index, int> table_analyse;  //分析表
   string ch; //输入部分 可能用char
   vector<tag> line;
+  vector<Token> token_line;
+  int num;
   int pos;
   vector<vector<int>> grammar; // 文法 一个二维数组 每个元素是一个character的序号
   vector<tag> character; // 文法符号
@@ -43,6 +46,8 @@ public:
   map<int, vector<int>> first;
   map<int, vector<int>> follow;
   map<int, vector<int>>select;
+  Infer infer;
+
 
   void table_make();
   void make_first(int index);

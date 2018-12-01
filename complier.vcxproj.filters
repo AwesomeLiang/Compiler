@@ -30,6 +30,12 @@
     <ClCompile Include="recursion.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="semantic analyzer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lexical analyzer.h">
@@ -42,6 +48,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="recursion.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="semantic analyzer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
