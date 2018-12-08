@@ -317,9 +317,10 @@ Lexer::Lexer()
   reserve(token_make(FALSE, lexeme_str_make("false", l), t, 6));
   reserve(token_make(INT, lexeme_str_make("int", l), t, 7));
   reserve(token_make(DOUBLE, lexeme_str_make("double", l), t, 8));
-  reserve(token_make(IF, lexeme_str_make("if", l), t, 9));
+  reserve(token_make(STRING, lexeme_str_make("string", l), t, 9));
   reserve(token_make(CHAR, lexeme_str_make("char", l), t, 10));
   reserve(token_make(INCLUDE, lexeme_str_make("include", l), t, 11));
+  reserve(token_make(GOTO, lexeme_str_make("goto", l), t, 12));
 }
 
 void Lexer::reserve(Token t)
@@ -382,11 +383,11 @@ Token Lexer::scan()
   第一个读到的是字母：
 
   */
-  //cout << peek;
+
 
   for (;; readch())
   {
-    //一个字符串结尾/0可能会导致错误 注意全篇输入的时候是否要在另一行开头将peek赋0
+   
     if (peek == ' ' || peek == '\t')
       continue;
     else if (peek == '\n')
@@ -398,21 +399,7 @@ Token Lexer::scan()
     else break;
   }
 
-  /*switch (peek)
-  {
-  case('&'):
-  if (readch('&')) return token_make(AND, lexeme_str_make("&&", l), tok); else return token_make(BITAND, lexeme_str_make("&", l), tok);
-  case('|'):
-  if (readch('|')) return token_make(OR, lexeme_str_make("||", l), tok); else return token_make(BITOR, lexeme_str_make("|", l), tok);
-  case('<'):
-  if (readch('=')) return token_make(LE, lexeme_str_make("<=", l), tok); else return token_make(LT, lexeme_str_make("<", l), tok);
-  case('>'):
-  if (readch('=')) return token_make(GE, lexeme_str_make(">=", l), tok); else return token_make(GT, lexeme_str_make(">", l), tok);
-  case('='):
-  if (readch('=')) return token_make(EQ, lexeme_str_make("==", l), tok); else return token_make(ASSIGN, lexeme_str_make("=", l), tok);
-  case('!'):
-  if (readch('=')) return token_make(NE, lexeme_str_make("!=", l), tok); else return token_make(NOT, lexeme_str_make("!", l), tok);
-  }*/
+  
   switch (peek)
   {
   case('&'):
@@ -421,42 +408,41 @@ Token Lexer::scan()
     {
       insert_delimiter("&", tok, l, BITAND);  return tok;
     }
-    //if (readch('&')) return token_make(AND, lexeme_str_make("&&", l), tok); else return token_make(BITAND, lexeme_str_make("&", l), tok);
-  case('|'):
+   
     if (readch('|')) { insert_delimiter("||", tok, l, OR);  return tok; }
     else
     {
       insert_delimiter("|", tok, l, BITOR);  return tok;
     }
-    //if (readch('|')) return token_make(OR, lexeme_str_make("||", l), tok); else return token_make(BITOR, lexeme_str_make("|", l), tok);
+   
   case('<'):
     if (readch('=')) { insert_delimiter("<=", tok, l, LE);  return tok; }
     else
     {
       insert_delimiter("<", tok, l, LT);  return tok;
     }
-    //if (readch('=')) return token_make(LE, lexeme_str_make("<=", l), tok); else return token_make(LT, lexeme_str_make("<", l), tok);
+   
   case('>'):
     if (readch('=')) { insert_delimiter(">=", tok, l, GE);  return tok; }
     else
     {
       insert_delimiter(">", tok, l, GT);  return tok;
     }
-    //if (readch('=')) return token_make(GE, lexeme_str_make(">=", l), tok); else return token_make(GT, lexeme_str_make(">", l), tok);
+    
   case('='):
     if (readch('=')) { insert_delimiter("==", tok, l, EQ);  return tok; }
     else
     {
       insert_delimiter("=", tok, l, ASSIGN);  return tok;
     }
-    //if (readch('=')) return token_make(EQ, lexeme_str_make("==", l), tok); else return token_make(ASSIGN, lexeme_str_make("=", l), tok);
+   
   case('!'):
     if (readch('=')) { insert_delimiter("!=", tok, l, NE);  return tok; }
     else
     {
       insert_delimiter("!", tok, l, NOT);  return tok;
     }
-    // if (readch('=')) return token_make(NE, lexeme_str_make("!=", l), tok); else return token_make(NOT, lexeme_str_make("!", l), tok);
+   
   }
   if (peek == '.')
   {
@@ -562,6 +548,7 @@ Token Lexer::scan()
     peek = ' ';
     return tok;
   }
+
   if (isDigit(peek))
   {
     string str;
@@ -665,7 +652,7 @@ Token Lexer::scan()
     if (m == 1)
     {
       //实数
-      cout << "shishu" << endl;
+     
       insert_real(val*1.0*power(10, t*n - p), tok, l, REAL);  return tok;
     }
     else
@@ -716,7 +703,7 @@ Token Lexer::scan()
 
 
   }
-  //读到除标准类型外的东西，应该报错 还未处理
+
 
   if (peek == '\'')
   {

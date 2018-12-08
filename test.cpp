@@ -132,7 +132,7 @@ void test2(vector<vector<int>> &g, vector<string> &c, vector<int> &k, vector<int
   | IF LP Exp RP Stmt ELSE Stmt
   | WHILE LP Exp RP Stmt
   */
-
+  
   /*
   l.push_back(7);
   l.push_back(10);
@@ -172,7 +172,7 @@ void test2(vector<vector<int>> &g, vector<string> &c, vector<int> &k, vector<int
   c.push_back("IF");//28
   c.push_back("ELSE");//29
   c.push_back("WHILE");//30
-
+  
 
   k.push_back(1);
   k.push_back(1);

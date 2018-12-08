@@ -3,6 +3,8 @@
 #include<string>
 #include<map>
 #include<vector>
+
+
 using namespace std;
 /*
 词法分析器要分析的语法类型：
@@ -27,7 +29,7 @@ typedef enum
   RSP = 286/*右小括号')' */, LMP = 287/*左中括号'{' */, RMP = 288/*右中括号'}' */,
   RETURN = 289, SEMICOLON = 290,/*分号';' */ COMMA = 291/*逗号*/, LBP = 292, RBP = 293,
   CHAR = 294, STRING = 295, CH = 296, ADD = 297, SUB = 298, INCLUDE = 299, POINT = 300,
-  MUL = 301, DIV = 302, FINISH = 303
+  MUL = 301, DIV = 302, FINISH = 303,GOTO = 304
 } tag;
 
 struct lexeme_value
@@ -76,6 +78,8 @@ public:
   int index_char;
   int index_str;
   int kind;
+ 
+
   Lexer();
   void insert(int Kind, string str, Token &tok, lexeme_value l, tag t);
   void insert_key(string str, Token &tok, lexeme_value l, tag t);
