@@ -23,6 +23,7 @@ struct Node_Struct;
 struct Node_Param;
 struct Node_Type;
 
+//
 struct TPoint {
     Node_Array *point_array;    // 用于多维数组
     Node_Struct *point_struct;  //数组的单个元素是结构体
