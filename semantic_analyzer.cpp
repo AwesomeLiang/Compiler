@@ -1,4 +1,4 @@
-#include "semantic analyzer.h"
+#include "semantic_analyzer.h"
 
 
 int power(int i, int j)

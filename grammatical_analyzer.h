@@ -4,8 +4,8 @@
 #include<map>
 #include<vector>
 #include<stack>
-#include"lexical analyzer.h"
-#include "semantic analyzer.h"
+#include"lexical_analyzer.h"
+#include "semantic_analyzer.h"
 using namespace std;
 
 //需要一个自动生成自动机的

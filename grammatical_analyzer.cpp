@@ -1,4 +1,4 @@
-#include "grammatical analyzer.h"
+#include "grammatical_analyzer.h"
 
 
 //改变时，注意$ #的位置，和character = # 或 $的地方会出错

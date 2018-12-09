@@ -1,4 +1,4 @@
-#include "grammatical analyzer.h"
+#include "grammatical_analyzer.h"
 
 void test1(vector<vector<int>> &g, vector<string> &c, vector<int> &k, vector<int> &l)
 {

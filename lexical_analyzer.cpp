@@ -1,4 +1,4 @@
-#include "lexical analyzer.h"
+#include "lexical_analyzer.h"
 #include<math.h>
 
 Token token_make(tag t, lexeme_value l, Token &T, int ind)
