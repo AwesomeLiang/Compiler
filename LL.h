@@ -4,8 +4,8 @@
 #include<map>
 #include<vector>
 #include<stack>
-#include"lexical_analyzer.h"
-#include"semantic_analyzer.h"
+#include"lexical analyzer.h"
+#include"semantic analyzer.h"
 using namespace std;
 
 typedef struct pppair

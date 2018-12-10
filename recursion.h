@@ -1,7 +1,7 @@
 #pragma once
 #include<iostream>
 #include<vector>
-#include "lexical_analyzer.h"
+#include "lexical analyzer.h"
 using namespace std;
 
 /*

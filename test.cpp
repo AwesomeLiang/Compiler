@@ -1,4 +1,4 @@
-#include "grammatical_analyzer.h"
+#include "grammatical analyzer.h"
 
 void test1(vector<vector<int>> &g, vector<string> &c, vector<int> &k, vector<int> &l)
 {
@@ -188,7 +188,7 @@ void test2(vector<vector<int>> &g, vector<string> &c, vector<int> &k, vector<int
   k.push_back(0);
   k.push_back(0);
 
-
+  
   vector<int> temp_grammar;
   temp_grammar.clear();
   temp_grammar.push_back(0);

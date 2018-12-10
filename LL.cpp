@@ -1,14 +1,6 @@
 #include "LL.h"
 
-quaternary make_sequence1(Token Op, Token Arg1, Token Arg2, Token Result)
-{
-  quaternary q;
-  q.op = Op;
-  q.arg1 = Arg1;
-  q.arg2 = Arg2;
-  q.result = Result;
-  return q;
-}
+
 
 
 //在词法分析器最后返回token串的时候碰到＃也用到了这个tag6
@@ -255,8 +247,7 @@ LL::LL()
  
   
 }
-
-int LL::action()
+/*int LL::action()
 {
   int i;
   for ( i = 0; i < (int)character.size(); ++i)
@@ -268,7 +259,7 @@ int LL::action()
   stack_state.push(0);
   while (character[stack_state.top()] != FINISH || line[pos] != FINISH)
   {
-    if (kind[stack_state.top()] == 0/*栈顶是终结符*/ && line[pos] == character[stack_state.top()])
+    if (kind[stack_state.top()] == 0 && line[pos] == character[stack_state.top()])
     {
       //在这里要对id等赋值
       //如果栈顶的是id相消时
@@ -520,7 +511,8 @@ int LL::action()
     }
   }
     return 1;
-}
+}*/
+
 
 void LL::table_make()
 {
