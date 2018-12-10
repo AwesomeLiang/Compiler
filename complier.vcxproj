@@ -112,22 +112,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="grammatical analyzer.cpp" />
-    <ClCompile Include="lexical analyzer.cpp" />
+    <ClCompile Include="grammatical_analyzer.cpp" />
+    <ClCompile Include="lexical_analyzer.cpp" />
     <ClCompile Include="LL.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="recursion.cpp" />
-    <ClCompile Include="semantic analyzer.cpp" />
-    <ClCompile Include="Symbol.cpp" />
+    <ClCompile Include="semantic_analyzer.cpp" />
+    <ClCompile Include="symbol.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="grammatical analyzer.h" />
-    <ClInclude Include="lexical analyzer.h" />
+    <ClInclude Include="grammatical_analyzer.h" />
+    <ClInclude Include="lexical_analyzer.h" />
     <ClInclude Include="LL.h" />
     <ClInclude Include="recursion.h" />
-    <ClInclude Include="semantic analyzer.h" />
-    <ClInclude Include="Symbol.h" />
+    <ClInclude Include="semantic_analyzer.h" />
+    <ClInclude Include="symbol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

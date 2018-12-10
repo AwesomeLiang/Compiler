@@ -29,7 +29,7 @@ typedef enum
   RSP = 286/*右小括号')' */, LMP = 287/*左中括号'{' */, RMP = 288/*右中括号'}' */,
   RETURN = 289, SEMICOLON = 290,/*分号';' */ COMMA = 291/*逗号*/, LBP = 292, RBP = 293,
   CHAR = 294, STRING = 295, CH = 296, ADD = 297, SUB = 298, INCLUDE = 299, POINT = 300,
-  MUL = 301, DIV = 302, FINISH = 303,GOTO = 304
+  MUL = 301, DIV = 302, FINISH = 303,GOTO = 304,VOID = 305
 } tag;
 
 struct lexeme_value

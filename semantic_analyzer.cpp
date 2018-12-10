@@ -1,5 +1,6 @@
 #include "semantic_analyzer.h"
 
+//要求开始时addr 的index_length 都置为 - 1     !!!!!!!!!!
 
 int power(int i, int j)
 {
@@ -34,15 +35,99 @@ TVal judege(TVal t1, TVal t2)
   return t1 > t2 ? t1 : t2;
 }
 
+void Infer::Increase_Off(Index_4D index_type, int & offset)
+{
+  
+  switch (symbol.table_type[index_type.indexItem].tval)
+  {
+  case Int:
+    offset += 4;
+    break;
+  case Real:
+    offset += 8;
+    break;
+  case Char:
+    offset += 2;
+    break;
+  case String:
+    break;
+  case Bool:
+    offset += 1;
+    break;
+  case Array:
+    break;
+  case Struct:
+  {
+    int flag = 0;
+    int indexDeep = symbol.index_deep_now;
+    int indexFunc = symbol.index_func_now;
+    while (!flag && indexDeep >= 0)
+    {
+     
+      for (int i = 0; i < (int)symbol.table_id_3[indexDeep][indexFunc].table_id_1.size(); ++i)
+      {
+        if (symbol.table_id_3[indexDeep][indexFunc].table_id_1[i].point_type.indexItem == index_type.indexItem)
+        {
+          if (symbol.table_id_3[indexDeep][indexFunc].table_id_1[i].addr.length == -1)
+          {
+            //error  要求开始时index_length 都置为 -1
+          }
+          flag = 1;
+          offset += symbol.table_id_3[indexDeep][indexFunc].table_id_1[i].addr.length;
+          break;
+        }
+      }
+      if (flag == 0)
+      {
+        indexDeep = symbol.table_id_3[indexDeep][indexFunc].parent.indexDeep;
+        indexFunc = symbol.table_id_3[indexDeep][indexFunc].parent.indexFunc;
+      }
+    }
+    if (flag == 0)
+    {
+      //error
+    }
+  }
+    break;
+  default:
+    break;
+  }
+}
+
 void Infer::work(int index_grammar, vector<Token> token_line, int pos)
 {
   //没有做错误处理 比如类型不符， A+3 就看 A的类型和3的表对应的类型是不是一个类型
   //没有完全完成 压入栈但是不用做四元式产生的符号产生的影响 应该列出所有被压入栈中的元素，然后依次检查
   switch (index_grammar)
   {
-  case 0:   //Program->ExtDefList
+  case 0:   //Program->top ExtDefList
     break;
-  case 1:   //ExtDefList->ExtDef, ExtDefList
+  case: //top->VOID
+  {
+    symbol.index_deep_now = 0;
+    symbol.index_func_now = 0;
+    Node_Id_2 node_id_2;
+    node_id_2.parent.indexDeep = -1;
+    if (symbol.space[symbol.index_deep_now] == 0)
+    {
+      //未分配空间
+      Node_Id_3 node_id_3;
+      node_id_3.push_back(node_id_2);
+      symbol.table_id_3.push_back(node_id_3);
+      symbol.space[symbol.index_deep_now] = 1;
+
+    }
+    else
+    {
+      symbol.table_id_3[symbol.index_deep_now].push_back(node_id_2);
+    }
+
+
+  }
+
+
+  break;
+  case 1:   //ExtDefList->ExtDef  ExtDefList
     break;
   case 2:   //ExtDefList->VOID
     break;
@@ -50,7 +135,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
 
 
     break;
-  case 4:   //ExtDef->Specifier  SEMI
+  case 4:   //ExtDef->Specifier  SEMI  用于定义结构体
     break;
   case 5:  //ExtDef->Specifier  FunDec  CompSt
     break;
@@ -61,7 +146,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     temp_node->cat = v;
     stack_infer.pop();
   }
-    break;
+  break;
   case 7: //ExtDeclist->VarDec InitLable ASSIGN Exp
   {
     quaternary quaternary_ASSIGN;
@@ -93,60 +178,56 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     sequence_temp.push_back(quaternary_ASSIGN);
 
   }
-    Node_Id_1 *temp_node = &symbol.stack_node_id.top();
-    symbol.stack_node_id.pop();
-    temp_node->cat = v;
-    break;
+
+  break;
   case 8: //ExtDecList->ExtDecList  COMMA  VarDec
-    {
-      Node_Id_1 *temp_node = &symbol.stack_node_id.top();
-      symbol.stack_node_id.pop();
-      temp_node->cat = v;
-      stack_infer.pop();
-    }
-    break;
+  {
+
+    stack_infer.pop();
+  }
+  break;
   case 9: //ExtDeclist->ExtDecList  COMMA  VarDec  InitLable ASSIGN Exp
-    Node_Id_1 *temp_node = &symbol.stack_node_id.top();
-    symbol.stack_node_id.pop();
-    temp_node->cat = v;
-    //处理后部分的VarDec  InitLable ASSIGN Exp
+          //处理后部分的VarDec  InitLable ASSIGN Exp
+  {
+    quaternary quaternary_ASSIGN;
+
+    Index_4D index_op;
+    index_op.indexDeep = -1;
+    index_op.indexFunc = -1;
+    index_op.indexKind = 2;
+    for (int i = 0; i < (int)symbol.table_key.size(); ++i)
     {
-      quaternary quaternary_ASSIGN;
-
-      Index_4D index_op;
-      index_op.indexDeep = -1;
-      index_op.indexFunc = -1;
-      index_op.indexKind = 2;
-      for (int i = 0; i < (int)symbol.table_key.size(); ++i)
+      if (symbol.table_key[i] == ASSIGN)
       {
-        if (symbol.table_key[i] == ASSIGN)
-        {
-          index_op.indexItem = i;
-          break;
-        }
-
+        index_op.indexItem = i;
+        break;
       }
 
-      Index_4D index_arg1;
-      index_arg1 = stack_infer.top();
-      stack_infer.pop();
-
-      Index_4D index_result;
-      index_result = stack_infer.top();
-      stack_infer.pop();
-      quaternary_ASSIGN.op = index_op;
-      quaternary_ASSIGN.arg1 = index_arg1;
-      quaternary_ASSIGN.result = index_result;
-      sequence_temp.push_back(quaternary_ASSIGN);
-
     }
-    break;
+
+    Index_4D index_arg1;
+    index_arg1 = stack_infer.top();
+    stack_infer.pop();
+
+    Index_4D index_result;
+    index_result = stack_infer.top();
+    stack_infer.pop();
+    quaternary_ASSIGN.op = index_op;
+    quaternary_ASSIGN.arg1 = index_arg1;
+    quaternary_ASSIGN.result = index_result;
+    sequence_temp.push_back(quaternary_ASSIGN);
+
+  }
+  break;
   case 10: //Specifier->TYPE
            //这一步是确定了定义的变量的类型
-    break;
+  {
+    symbol.catalog = v;
+  }
+  break;
   case: //TYPE->INT
   {
-    
+
     int flag = 0;
     for (int i = 0; i < (int)symbol.table_type.size(); ++i)
     {
@@ -192,62 +273,196 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
 
 
   }
-
+  case: //TYPE->ID
+  {
+    int flag = 0;
+    int indexDeep = 0;
+    int indexFunc = 0;
+    int indexItem;
+    //对于新类型的定义只可能在全局作用域中
+    for (int i = 0; i < (int)symbol.table_id_3[indexDeep][indexFunc].table_id_1.size(); ++i)
+    {
+      if (symbol.table_id_3[indexDeep][indexFunc].table_id_1[i].name == token_line[pos].lexeme_val.str)
+      {
+        symbol.type.indexDeep = -1;
+        symbol.type.indexFunc = -1;
+        symbol.type.indexKind = 6;
+        symbol.type.indexItem = symbol.table_id_3[indexDeep][indexFunc].table_id_1[i].point_type.indexItem;
+        flag = 1;
+        break;
+      }
+    }
+    if (flag == 0)
+    {
+      //error
+    }
+    
+  }
   break;
   case 11: // Specifier->StructSpecifier
+  {
+    symbol.catalog = t;
+  }
+  break;
+  case 12: // StructSpecifier->STRUCT  OptTag  LC  DefList  RC 用于结构体的声明
+  {
+    //把从symbol.index_item_now +1 开始的个标识符表都加入到结构体表中
+    symbol.mode = 0;
+
+    symbol.table_type[stack_infer.top().indexItem].tpoint.point_struct = symbol.table_struct;
+    stack_infer.pop();
+    
+    symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1[symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.size() - 1].addr.length = symbol.offset;
+    symbol.offset = 0;
+  }
     break;
-  case 12: // StructSpecifier->STRUCT  OptTag  LC  DefList  RC
-    break;
-  case 13: // StructSpecifier->STRUCT  Tag
+  case 13: // StructSpecifier->STRUCT  Tag  用于结构体的定义
     break;
   case 14: // OptTag->ID
+  {
+    //addr没处理
+    symbol.mode = 1;
+    Node_Type new_type;
+    new_type.tval = Struct;
+    symbol.table_type.push_back(new_type);
+    Index_4D index_type;
+    index_type.indexDeep = -1;
+    index_type.indexFunc = -1;
+    index_type.indexKind = 6;
+    index_type.indexItem = (int)symbol.table_type.size() - 1;
+    stack_infer.push(index_type);
+    symbol.type = index_type;
+    Node_Id_1 node_id_1;
+    node_id_1.cat = t;
+    node_id_1.name = token_line[pos].lexeme_val.str;
+    node_id_1.point_type = index_type;
+    symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.push_back(node_id_1);
+    symbol.index_item_now = (int)symbol.table_type.size() - 1;
+
+    symbol.offset = 0;
+    vector<Node_Struct> v_node_struct;
+    symbol.table_struct = v_node_struct;
+  }
     break;
   case 15: // OptTag->VOID
+  {
+    symbol.mode = 1;
+    Node_Type new_type;
+    new_type.tval = Struct;
+    symbol.table_type.push_back(new_type);
+    Index_4D index_type;
+    index_type.indexDeep = -1;
+    index_type.indexFunc = -1;
+    index_type.indexKind = 6;
+    index_type.indexItem = (int)symbol.table_type.size() - 1;
+    stack_infer.push(index_type);
+    symbol.type = index_type;
+    symbol.index_item_now = (int)symbol.table_type.size() - 1;
+
+    symbol.offset = 0;
+    vector<Node_Struct> v_node_struct;
+    symbol.table_struct = v_node_struct; 
+  }
     break;
-  case 16: // Tag->ID
+  
+  case 16: // Tag->ID   没有解决自嵌套定义问题
+  {
+    int flag = 0;
+    int indexDeep = 0;
+    int indexFunc = 0;
+    int indexItem;
+    //对于新类型的定义只可能在全局作用域中
+    for (int i = 0; i < (int)symbol.table_id_3[indexDeep][indexFunc].table_id_1.size(); ++i)
+    {
+      if (symbol.table_id_3[indexDeep][indexFunc].table_id_1[i].name == token_line[pos].lexeme_val.str)
+      {
+        symbol.type.indexDeep = -1;
+        symbol.type.indexFunc = -1;
+        symbol.type.indexKind = 6;
+        symbol.type.indexItem = symbol.table_id_3[indexDeep][indexFunc].table_id_1[i].point_type.indexItem;
+        flag = 1;
+        break;
+      }
+    }
+    if (flag == 0)
+    {
+      //error
+    }
+  }
     break;
   case 17: // VarDec->ID
   {
     //该文法是用于标识符的声明 ， 所以应该先检查重定义
-    for (int i = 0; i < (int)symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.size(); ++i)
+    if (symbol.mode == 0)
     {
-      if (symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1[i].name == token_line[pos].lexeme_val.str)
+      for (int i = 0; i < (int)symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.size(); ++i)
       {
-        //error
+        if (symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1[i].name == token_line[pos].lexeme_val.str)
+        {
+          //error
+        }
       }
-    }
 
-    Node_Id_1 new_node;
-    new_node.name = token_line[pos].lexeme_val.str;
-    new_node.point_type = symbol.type;
-    symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.push_back(new_node);
-    Index_4D index_id;
-    index_id.indexDeep = symbol.index_deep_now;
-    index_id.indexFunc = symbol.index_func_now;
-    index_id.indexKind = 3;
-    index_id.indexItem = (int)symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.size() - 1;
-    stack_infer.push(index_id);
-    symbol.stack_node_id.push(new_node);// 忘了有什么用 !!!!!!!!!
+      Node_Id_1 new_node;
+      new_node.name = token_line[pos].lexeme_val.str;
+      new_node.point_type = symbol.type;
+      new_node.cat = symbol.catalog;
+      symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.push_back(new_node);
+      Index_4D index_id;
+      index_id.indexDeep = symbol.index_deep_now;
+      index_id.indexFunc = symbol.index_func_now;
+      index_id.indexKind = 3;
+      index_id.indexItem = (int)symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.size() - 1;
+      stack_infer.push(index_id);
+      symbol.stack_node_id.push(new_node);// 忘了有什么用 !!!!!!!!!
+    }
+    else
+    {
+      //没考虑结构体自嵌套定义出错
+      for (int i = 0; i < (int)symbol.table_struct.size(); ++i)
+      {
+        if (symbol.table_struct[i].dname == token_line[pos].lexeme_val.str)
+        {
+          //error;
+        }
+      }
+      Node_Struct node_struct;
+      node_struct.dname = token_line[pos].lexeme_val.str;
+      node_struct.offset = symbol.offset;
+      node_struct.index_tp = symbol.type;
+      Increase_Off(symbol.type,symbol.offset);
+      symbol.table_struct.push_back(node_struct);
+    }
   }
-    break;
+  break;
   case 18: // VarDec->VarDec  LB  INT  RB
     break;
-  case 19: //FunDec->ID  LP  VarList  RP
+  case 19: //FunDec->catF VarDec  LP  VarList  RP   这个VarDec不一定 看看是否需要新的名字
     break;
-  case 20://FunDec->ID  LP  RP
+  case: // catF->VOID
+  {
+    symbol.catalog = f;
+  }
+  break;
+  case 20://FunDec->catF VarDec  LP  RP
     break;
   case 21://VarList->VarList  COMMA  ParamDec
     break;
   case://VarList->ParamDec
     break;
-  case://ParamDec->Specifier  VarDec
+  case://ParamDec->Specifier catVn VarDec
     break;
+  case: //catVn->VOID
+  {
+    symbol.catalog = vn;
+  }
+  break;
   case://CompSt->LC DeepInc DefList  StmtList  RC
   {
     symbol.index_deep_now = symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].parent.indexDeep;
     symbol.index_func_now = symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].parent.indexFunc;
   }
-    break;
+  break;
   case: // DeepInc->VOID
   {
     Node_Id_2 node_id_2;
@@ -256,11 +471,24 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     node_id_2.parent.indexKind = 3;
     symbol.index_deep_now++;
     symbol.index_func_now = (int)symbol.table_id_3[symbol.index_deep_now].size();
-    symbol.table_id_3[symbol.index_deep_now].push_back(node_id_2);
-    
+
+    if (symbol.space[symbol.index_deep_now] == 0)
+    {
+      //未分配空间
+      Node_Id_3 node_id_3;
+      node_id_3.push_back(node_id_2);
+      symbol.table_id_3.push_back(node_id_3);
+      symbol.space[symbol.index_deep_now] = 1;
+
+    }
+    else
+    {
+      symbol.table_id_3[symbol.index_deep_now].push_back(node_id_2);
+    }
+
+
   }
-    
-    break;
+  break;
   case://StmtList->VOID
     break;
   case://StmtList->StmtList  Stmt
@@ -269,7 +497,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
   {
     stack_infer.pop();
   }
-    break;
+  break;
   case://Stmt->CompSt
     break;
   case://Stmt->RETURN  Exp  SEMI
@@ -279,8 +507,8 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     symbol.index_deep_now = symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].parent.indexDeep;
     symbol.index_func_now = symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].parent.indexFunc;
   }
-   
-    break; 
+
+  break;
   case: // causeIF->void
   {
     //<IF,EXP,Label1,Label2>
@@ -295,7 +523,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_label1.indexFunc = -1;
     index_label1.indexDeep = -1;
     index_label1.indexItem = num_label;
-    
+
 
     num_label = (int)symbol.table_label.size();
     symbol.table_label.push_back(num_label);
@@ -317,7 +545,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_if.indexItem = i;
         break;
       }
-        
+
     }
     quaternary quaternary_if;
     quaternary_if.op = index_if;
@@ -332,10 +560,22 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     node_id_2.parent.indexKind = 3;
     symbol.index_deep_now++;
     symbol.index_func_now = (int)symbol.table_id_3[symbol.index_deep_now].size();
-    symbol.table_id_3[symbol.index_deep_now].push_back(node_id_2);
+    if (symbol.space[symbol.index_deep_now] == 0)
+    {
+      //未分配空间
+      Node_Id_3 node_id_3;
+      node_id_3.push_back(node_id_2);
+      symbol.table_id_3.push_back(node_id_3);
+      symbol.space[symbol.index_deep_now] = 1;
+
+    }
+    else
+    {
+      symbol.table_id_3[symbol.index_deep_now].push_back(node_id_2);
+    }
 
   }
-    break;
+  break;
   case://Label->void
   {
     //<Label,,,>
@@ -350,13 +590,13 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
 
     }
   }
-    break;
+  break;
   case://Stmt->IF  LP  Exp  RP  causeIF Label  Stmt bgoto ELSE  Label  Stmt  Label
   {
     symbol.index_deep_now = symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].parent.indexDeep;
     symbol.index_func_now = symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].parent.indexFunc;
   }
-    break;
+  break;
   case://bgoto->void
   {
     Index_4D index_goto;
@@ -370,7 +610,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_goto.indexItem = i;
         break;
       }
-        
+
     }
     int num_label;
     num_label = (int)symbol.table_label.size();
@@ -390,13 +630,13 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     quaternary_bgoto.arg1 = index_label1;
     sequence_temp.push_back(quaternary_bgoto);
   }
-    break;
+  break;
   case://Stmt->fLabel  WHILE  LP  Exp  RP causeWHILE  Label  Stmt  fgoto Label
   {
     symbol.index_deep_now = symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].parent.indexDeep;
     symbol.index_func_now = symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].parent.indexFunc;
   }
-    break;
+  break;
   case://causeWHILE -> void
   {
     //<WHILE,EXP,Label1,Label2>
@@ -411,7 +651,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_label1.indexFunc = -1;
     index_label1.indexDeep = -1;
     index_label1.indexItem = num_label;
-    
+
 
     num_label = (int)symbol.table_label.size();
     symbol.table_label.push_back(num_label);
@@ -437,7 +677,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_if.indexItem = i;
         break;
       }
-        
+
     }
     quaternary quaternary_if;
     quaternary_if.op = index_if;
@@ -453,9 +693,21 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     node_id_2.parent.indexKind = 3;
     symbol.index_deep_now++;
     symbol.index_func_now = (int)symbol.table_id_3[symbol.index_deep_now].size();
-    symbol.table_id_3[symbol.index_deep_now].push_back(node_id_2);
+    if (symbol.space[symbol.index_deep_now] == 0)
+    {
+      //未分配空间
+      Node_Id_3 node_id_3;
+      node_id_3.push_back(node_id_2);
+      symbol.table_id_3.push_back(node_id_3);
+      symbol.space[symbol.index_deep_now] = 1;
+
+    }
+    else
+    {
+      symbol.table_id_3[symbol.index_deep_now].push_back(node_id_2);
+    }
   }
-    break;
+  break;
   case: // fLabel-> void
   {
     int num_label;
@@ -470,7 +722,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     label.op = index_label1;
     sequence_temp.push_back(label);
   }
-    break;
+  break;
   case: // fgoto->void
   {
     Index_4D index_goto;
@@ -484,14 +736,14 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_goto.indexItem = i;
         break;
       }
-        
+
     }
-    
-    
+
+
     Index_4D index_temp;
     index_temp = stack_infer.top();
     stack_infer.pop();
-    
+
     quaternary quaternary_fgoto;
     quaternary_fgoto.op = index_goto;
     quaternary_fgoto.arg1 = index_temp;
@@ -503,7 +755,6 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
   case://DefList->DefList  Def
     break;
   case://Def->Specifier  DecList  SEMI
-    //处理catalog
     break;
   case://DecList->Dec
     break;
@@ -512,8 +763,9 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
   case://Dec->VarDec
   {
     stack_infer.pop();
+    
   }
-    break;
+  break;
   case://Dec->VarDec  InitLabel  ASSIGNOP  Exp
   {
     quaternary quaternary_ASSIGN;
@@ -529,7 +781,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_op.indexItem = i;
         break;
       }
-        
+
     }
 
     Index_4D index_arg1;
@@ -543,9 +795,9 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     quaternary_ASSIGN.arg1 = index_arg1;
     quaternary_ASSIGN.result = index_result;
     sequence_temp.push_back(quaternary_ASSIGN);
-
+    
   }
-    break;
+  break;
   case://InitLabel->VOID
     break;
   case://Args->Args  COMMA  Exp
@@ -567,7 +819,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_op.indexItem = i;
         break;
       }
-       
+
     }
 
     Index_4D index_arg1;
@@ -576,14 +828,14 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
 
     Index_4D index_result;
     index_result = stack_infer.top();
-    
+
     quaternary_ASSIGN.op = index_op;
     quaternary_ASSIGN.arg1 = index_arg1;
     quaternary_ASSIGN.result = index_result;
     sequence_temp.push_back(quaternary_ASSIGN);
-    
+
   }
-    break;
+  break;
   case://Exp->OrRel
     break;
   case://LeftVal->ID
@@ -620,17 +872,17 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     }
     else
     {
-      
+
       index_leftval.indexDeep = deep_temp;
       index_leftval.indexKind = 3;
       index_leftval.indexFunc = func_temp;
       index_leftval.indexItem = item_temp;
-      
+
     }
     stack_infer.push(index_leftval);
   }
-    
-    break;
+
+  break;
   case://LeftVal->LeftVal  LB  Add  RB   用于数组
     break;
   case://NotRel->Factor
@@ -651,7 +903,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_op.indexItem = i;
         break;
       }
-        
+
     }
 
     Index_4D index_arg2;
@@ -678,7 +930,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     }
     Node_Id_1 temp_id;
     temp_id.name = "t";
-    name_make(symbol.num_t,temp_id.name);
+    name_make(symbol.num_t, temp_id.name);
     symbol.num_t++;
     temp_id.point_type = index_bool;
     temp_id.cat = v;
@@ -692,8 +944,8 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
 
     Index_4D index_result;
     index_result = stack_infer.top();
-    
-   
+
+
     quaternary_OR.op = index_op;
     quaternary_OR.arg1 = index_arg1;
     quaternary_OR.arg2 = index_arg2;
@@ -702,7 +954,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
 
   }
 
-    break;
+  break;
   case://OrRel->AndRel
     break;
   case://AndRel->AndRel  AND  Rel              ！！！！！！！！！！！！！！！！！！！！
@@ -721,7 +973,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_op.indexItem = i;
         break;
       }
-       
+
     }
 
     Index_4D index_arg2;
@@ -771,7 +1023,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     sequence_temp.push_back(quaternary_AND);
 
   }
-    break;
+  break;
   case://AndRel->Rel
     break;
   case://Rel->Rel  RELOP  Add            //需要完成但是还没想好
@@ -794,7 +1046,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_op.indexItem = i;
         break;
       }
-        
+
     }
 
 
@@ -839,7 +1091,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     sequence_temp.push_back(quaternary_NOT);
 
   }
-    break;
+  break;
   case://Add->Add  PLUS  Term
   {
     //还需要把新产生的变量放到符号表中
@@ -856,7 +1108,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_op.indexItem = i;
         break;
       }
-       
+
     }
 
     Index_4D index_arg2;
@@ -876,7 +1128,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     int pos2;
     if (index_arg1.indexKind == 3)
     {
-       pos1 = symbol.table_id_3[index_arg1.indexDeep][index_arg1.indexFunc].table_id_1[index_arg1.indexItem].point_type.indexItem;
+      pos1 = symbol.table_id_3[index_arg1.indexDeep][index_arg1.indexFunc].table_id_1[index_arg1.indexItem].point_type.indexItem;
     }
     else if (index_arg1.indexKind == 4)
     {
@@ -889,7 +1141,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
           break;
         }
       }
-      
+
     }
     else if (index_arg1.indexKind == 5)
     {
@@ -940,9 +1192,9 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     {
       //error;
     }
-    
+
     TVal tval_temp = judege(symbol.table_type[pos1].tval, symbol.table_type[pos2].tval); // 变量一 变量二 仲裁后的类型
-    
+
     for (int i = 0; i < (int)symbol.table_type.size(); ++i)
     {
       if (symbol.table_type[i].tval = tval_temp)
@@ -978,7 +1230,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     sequence_temp.push_back(quaternary_OR);
 
   }
-    break;
+  break;
   case://Add->Add  MINUS  Term
   {
     //还需要把新产生的变量放到符号表中
@@ -995,7 +1247,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_op.indexItem = i;
         break;
       }
-        
+
     }
 
     Index_4D index_arg2;
@@ -1116,7 +1368,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     sequence_temp.push_back(quaternary_OR);
 
   }
-    break;
+  break;
   case://Add->MINUS  Term
   {
     //还需要把新产生的变量放到符号表中
@@ -1133,7 +1385,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_op.indexItem = i;
         break;
       }
-        
+
     }
 
 
@@ -1151,7 +1403,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     sequence_temp.push_back(quaternary_NOT);
 
   }
-    break;
+  break;
   case://Add->Term
     break;
   case://Term->Term  STAR  Factor
@@ -1170,7 +1422,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_op.indexItem = i;
         break;
       }
-        
+
     }
 
     Index_4D index_arg2;
@@ -1291,7 +1543,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     sequence_temp.push_back(quaternary_OR);
 
   }
-    break;
+  break;
   case://Term->Term  DIV  Factor
   {
     //还需要把新产生的变量放到符号表中
@@ -1308,7 +1560,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_op.indexItem = i;
         break;
       }
-        
+
     }
 
     Index_4D index_arg2;
@@ -1429,7 +1681,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     sequence_temp.push_back(quaternary_OR);
 
   }
-    break;
+  break;
   case://Term->Factor 
     break;
   case://Factor->LP  Exp  RP
@@ -1452,7 +1704,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         index_num.indexItem = i;
         break;
       }
-      
+
     }
     if (flag == 0)
     {
@@ -1461,9 +1713,9 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
       symbol.table_num.push_back(token_line[pos].lexeme_val.num);
     }
     stack_infer.push(index_num);
-    
+
   }
-    break;
+  break;
   case://Factor->REAL
   {
     Index_4D index_real;
@@ -1491,14 +1743,14 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     stack_infer.push(index_real);
 
   }
-    break;
+  break;
   case://Factor->ID  LP  RP   用于函数
     break;
   case://Factor->ID  LP  Args  RP  用于函数（带参）
     break;
   case://LeftLabel->VOID
     break;
- 
+
   default:
     break;
   }

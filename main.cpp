@@ -5,8 +5,8 @@
 #include<string.h>
 #include<conio.h>
 #include<stdio.h>
-#include "lexical analyzer.h"
-#include "grammatical analyzer.h"
+#include "lexical_analyzer.h"
+#include "grammatical_analyzer.h"
 
 //#include "LL.h"
 //#include "recursion.h"

@@ -156,9 +156,9 @@ void Parser::action()
       break;
     case 999: // reduced  找到产生式，A->β ，连续弹栈length(β)次，接着把栈顶状态和A产生的新状态压入状态栈中，A压入符号栈中 当前输入符号不变
 
-      infer.work(table_analyse[temp_index].state, token_line, pos);
+      //infer.work(table_analyse[temp_index].state, token_line, pos);
       
-      if (grammar[table_analyse[temp_index].state][1] != 8) // 8是$
+      if (character[grammar[table_analyse[temp_index].state][1]] != VOID) // 8是$
       {
         int length;
         // table_analyse[temp].state 这个代表第几个产生式 ,grammar[table_analyse[temp].state] 就代表产生式 grammar[table_analyse[temp].state].length-3就是产生式右部即β的长度（“是否占字节）
@@ -264,8 +264,14 @@ void Parser::items_make()
   item temp;
   ip temp_ip;
   vector<int> temp_tag;
-
-  temp_tag.push_back(9);//9是#
+  for (int i = 0; i < (int)character.size(); ++i)
+  {
+    if (character[i] == FINISH)
+    {
+      temp_tag.push_back(i);//9是#
+      break;
+    }
+  }
   temp_ip.index_grammar = 0;
   temp_ip.pos_point = 1;
   temp.grammar_item.push_back(temp_ip);
@@ -273,14 +279,31 @@ void Parser::items_make()
   temp.tag_reduced.push_back(temp_tag);
   items.push_back(CLOSURE(temp));
   temp = CLOSURE(temp);
-  
+
+  switch (switch_on)
+  {
+  default:
+    break;
+  }
+
+  Node {
+    Index_4D index_temp;
+    switch (index_temp.indexKind)
+    {
+    case 0://
+      table_key[index_temp.indexItem]
+        return 
+    default:
+      break;
+    }
+  }
 
   while (sum)
   {
     
     for (int j = 0; j < (int)character.size(); ++j)
     {
-      if (character[j] == (tag)8)//tag(8)是$
+      if (character[j] == VOID)//tag(8)是$
         continue;
       temp = GOTO(order, j);
       
@@ -299,7 +322,14 @@ void Parser::items_make()
 void Parser::table_make()
 {
   vector<int> temp_tag;
-  temp_tag.push_back(9);//9是#
+  for (int i = 0; i < (int)character.size(); ++i)
+  {
+    if (character[i] == FINISH)
+    {
+      temp_tag.push_back(i);//9是#
+      break;
+    }
+  }
   index temp1;
   for (int i = 0; i < (int)items.size(); ++i)
   {
@@ -323,12 +353,18 @@ void Parser::table_make()
         //接受状态，表里写a
         index temp;
         temp.state = i;
-        temp.V = 9; //9是#
+        for (int y = 0; y < (int)character.size(); ++y)
+        {
+          if (character[y] == FINISH)
+          {
+            temp.V = y;
+          }
+        }
         table_analyse[temp].V = 998; // 998是a
         table_analyse[temp].state = 0;
-
+        
       }
-      else if (items[i].grammar_item[j].pos_point == (int)grammar[items[i].grammar_item[j].index_grammar].size() || grammar[items[i].grammar_item[j].index_grammar][1] == 8)//8 是 $
+      else if (items[i].grammar_item[j].pos_point == (int)grammar[items[i].grammar_item[j].index_grammar].size() || character[grammar[items[i].grammar_item[j].index_grammar][1]] == VOID)//8 是 $
       {
 
         index temp;
@@ -348,7 +384,7 @@ void Parser::table_make()
     }
     for (int j = 0; j < (int)character.size(); ++j)
     {
-      if (character[j] == (tag)8)//tag(8)是$
+      if (character[j] == VOID)//tag(8)是$
         continue;
       item temp_item;
       index temp_index;
@@ -410,9 +446,9 @@ vector<int> Parser::mfirst(int from_first,int index_g,vector<int> add_tag)
       temp_first = first[grammar[index_g][i]];
       for (int j = 0; j < (int)first[grammar[index_g][i]].size(); ++j)
       {
-        if (first[grammar[index_g][i]][j] == 8) //8是$
+        if (character[first[grammar[index_g][i]][j]] == VOID) //8是$
         {
-
+          
           vector<int>::iterator iter = temp_first.begin() + j; //可能出bug
           temp_first.erase(iter);
           temp_flag = 1;
@@ -421,6 +457,7 @@ vector<int> Parser::mfirst(int from_first,int index_g,vector<int> add_tag)
       }
       
       join(mytag, temp_first);
+     
       if (temp_flag == 0)
       {
         //说明first中没空
@@ -509,12 +546,12 @@ item Parser::CLOSURE(item t)
   {
 
     //找到点的位置
-    if (grammar[t.grammar_item[i].index_grammar][1] == 8)//8是$
+    /*if (character[grammar[t.grammar_item[i].index_grammar][1]] == VOID)
     {
       sum--;
       i++;
       continue;
-    }
+    }*/
     if (t.grammar_item[i].pos_point == (int)grammar[t.grammar_item[i].index_grammar].size())
     {
       //判断点是否在最后也就是 点后是否还有符号
@@ -523,7 +560,7 @@ item Parser::CLOSURE(item t)
       continue;
     }
     int flag = 1;
-
+    //找到点的位置
     int afterpoint = grammar[t.grammar_item[i].index_grammar][t.grammar_item[i].pos_point];
     if (kind[afterpoint] == 1)
     {
@@ -540,8 +577,6 @@ item Parser::CLOSURE(item t)
           int k;
           
           
-          
-         
           //temp_tag的生成
           if (t.grammar_item[i].pos_point + 1 == grammar[t.grammar_item[i].index_grammar].size())
           {
@@ -551,12 +586,7 @@ item Parser::CLOSURE(item t)
           }
           else
           {
-
-
-
-
             join(temp_tag, mfirst(t.grammar_item[i].pos_point + 1, t.grammar_item[i].index_grammar, t.tag_reduced[i]));
-
           }
           
 
