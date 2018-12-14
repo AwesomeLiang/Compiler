@@ -148,16 +148,16 @@ void Parser::action()
     switch (table_analyse[temp_index].V)
     {
     case 997: // move
-      
+      cout << "move" << temp_index.state << " " << character[temp_index.V] << endl;
       stack_state.push(table_analyse[temp_index].state);
       
       stack_op.push(t);
       pos++;
       break;
     case 999: // reduced  找到产生式，A->β ，连续弹栈length(β)次，接着把栈顶状态和A产生的新状态压入状态栈中，A压入符号栈中 当前输入符号不变
-
-      //infer.work(table_analyse[temp_index].state, token_line, pos);
       
+      //infer.work(table_analyse[temp_index].state, token_line, pos);
+      cout << "reduced" << temp_index.state << " " << character[temp_index.V] << endl;
       if (character[grammar[table_analyse[temp_index].state][1]] != VOID) // 8是$
       {
         int length;
@@ -224,6 +224,7 @@ void Parser::action()
       success = 1;
       break;
     case 1000: // error
+      cout << "error"<<temp_index.state <<" "<< character[temp_index.V] << endl;
       success = 0;
       con = 0;
       break;
@@ -275,32 +276,15 @@ void Parser::items_make()
   temp_ip.index_grammar = 0;
   temp_ip.pos_point = 1;
   temp.grammar_item.push_back(temp_ip);
-  //str_temp = "#/" str_temp;
+  
   temp.tag_reduced.push_back(temp_tag);
   items.push_back(CLOSURE(temp));
   temp = CLOSURE(temp);
 
-  switch (switch_on)
-  {
-  default:
-    break;
-  }
-
-  Node {
-    Index_4D index_temp;
-    switch (index_temp.indexKind)
-    {
-    case 0://
-      table_key[index_temp.indexItem]
-        return 
-    default:
-      break;
-    }
-  }
 
   while (sum)
   {
-    
+
     for (int j = 0; j < (int)character.size(); ++j)
     {
       if (character[j] == VOID)//tag(8)是$
@@ -315,6 +299,7 @@ void Parser::items_make()
     }
     order++;
     sum--;
+    
   }
   
 }
@@ -346,6 +331,7 @@ void Parser::table_make()
   
   for (int i = 0; i < (int)items.size(); ++i)
   {
+    
     for (int j = 0; j < (int)items[i].grammar_item.size(); ++j)
     {
       if (items[i].grammar_item[j].index_grammar == 0 && items[i].grammar_item[j].pos_point == 2 && items[i].tag_reduced[j] == temp_tag)
@@ -375,6 +361,10 @@ void Parser::table_make()
         {
           temp.state = i;
           temp.V = items[i].tag_reduced[j][k];
+          if (table_analyse[temp].V == 997)
+          {
+            cout << "pay attention !!!!!!!!!!!!!!!!! crash" << endl;
+          }
           table_analyse[temp].state = items[i].grammar_item[j].index_grammar;
           table_analyse[temp].V = 999; // 999是r；
         }
@@ -394,12 +384,19 @@ void Parser::table_make()
       {
         temp_index.state = i;
         temp_index.V = j;
+        if (table_analyse[temp_index].V == 999)
+        {
+          cout << "pay attention !!!!!!!!!!!!!!!!! crash! "<<temp_index.state <<endl;
+        }
+        //if (table_analyse[temp_index].V == 999 && character[temp_index.V] == ID)   //移进归约冲突的解决      悬空else 也会冲突
+         // continue;
+       
         table_analyse[temp_index].state = temp_int;
         table_analyse[temp_index].V = 997; //997是S
       }
     }
   }
-  
+  cout << "no_bug_here1";
 
 
 }
@@ -429,10 +426,10 @@ vector<int> Parser::mfirst(int from_first,int index_g,vector<int> add_tag)
     //点后非终结符后的第一个文法符号是终结符，那么直接返回该终结符
     mytag.push_back(grammar[index_g][from_first]);
     return mytag;
-  }//点后非终结符后的第一个文法符号是非终结符，那么求他的first集合，分别处理带空和不带空的情况
+  }
   else
   {
-    
+    //点后非终结符后的第一个文法符号是非终结符，那么求他的first集合，分别处理带空和不带空的情况
     vector<int> temp_first;
     int i;
     for ( i = from_first; i < (int)grammar[index_g].size(); ++i)
@@ -440,15 +437,18 @@ vector<int> Parser::mfirst(int from_first,int index_g,vector<int> add_tag)
       int temp_flag = 0;
       if (first[grammar[index_g][i]].empty())
       {
-        first[grammar[index_g][i]] = make_first(grammar[index_g][i]);
         
+        first[grammar[index_g][i]] = make_first(grammar[index_g][i]);
+       
       }
       temp_first = first[grammar[index_g][i]];
+     
+     
       for (int j = 0; j < (int)first[grammar[index_g][i]].size(); ++j)
       {
         if (character[first[grammar[index_g][i]][j]] == VOID) //8是$
         {
-          
+         
           vector<int>::iterator iter = temp_first.begin() + j; //可能出bug
           temp_first.erase(iter);
           temp_flag = 1;
@@ -488,31 +488,78 @@ vector<int> Parser::make_first(int num)
     
     temp_first.push_back(num);
     return temp_first;
+    
   }
   
   for (int i = 0; i < (int)grammar.size(); ++i)
   {
+    
     if (grammar[i][0] == num)
     {
+     
       //找到产生式的左部是要求的非终结符号,那么就找右部的第一个符号
       if (kind[grammar[i][1]] == 0)
       {
-        if(!in_vector(grammar[i][1],temp_first))
+        
+        if (!in_vector(grammar[i][1], temp_first))
+        {
           temp_first.push_back(grammar[i][1]);
+          
+        }
+         
       }
       else
       {
         //右部第一个符号是非终结符，防止递归
         if (!first[grammar[i][1]].empty())
         {
+          
+          int flag_f = 0;
+          for (int j = 0; j < (int)first[grammar[i][1]].size(); ++j)
+          {
+            if (character[first[grammar[i][1]][j]] == VOID)
+            {
+              flag_f = 1;
+              break;
+            }
+          }
           join(temp_first, first[grammar[i][1]]);
+         
+          if (flag_f == 1)
+          {
+
+            int t = 2;
+            int flag_t = 1;
+            while (t < (int)grammar[i].size() && flag_t == 1)
+            {
+              flag_t = 0;
+              vector<int> temp_v = make_first(grammar[i][t]);
+              for (int y = 0; y < (int)temp_v.size(); ++y)
+              {
+                if (character[temp_v[y]] == VOID)
+                {
+                  flag_t = 1;
+                  break;
+                }
+              }
+              join(temp_first, temp_v);
+              ++t;
+            }
+
+          }
+          
         }
         else
         {
+          vector<int> v_temp;
+          /*
           if (num == grammar[i][1])
           {
-            continue;
+          continue;
           }
+          这个直接递归的处理不对！！！！！！！！！！
+          */
+          
           int temp_flag = 0;
           for (int j = 0; j < (int)cash.size(); ++j)
           {
@@ -525,8 +572,47 @@ vector<int> Parser::make_first(int num)
           if (temp_flag == 1)
             continue;
           cash.push_back(num);
-          join(temp_first, make_first(grammar[i][1]));
+          v_temp = make_first(grammar[i][1]);
+          join(temp_first, v_temp);
           cash.pop_back();
+
+          int flag_f = 0;
+          for (int j = 0; j < (int)v_temp.size(); ++j)
+          {
+            if (character[v_temp[j]] == VOID)
+            {
+              flag_f = 1;
+              break;
+            }
+          }
+
+          if (flag_f == 1)
+          {
+            
+            int t = 2;
+            int flag_t = 1;
+            while (t < (int)grammar[i].size() && flag_t == 1)
+            {
+              
+              flag_t = 0;
+              vector<int> temp_v = make_first(grammar[i][t]);
+              
+              for (int y = 0; y < (int)temp_v.size(); ++y)
+              {
+                
+                if (character[temp_v[y]] == VOID)
+                {
+                  flag_t = 1;
+                  break;
+                }
+              }
+
+              join(temp_first, temp_v);
+              ++t;
+            }
+
+          }
+          
         }
       }
     }
@@ -575,6 +661,9 @@ item Parser::CLOSURE(item t)
           vector<int> temp_tag;
           temp_tag.clear();
           int k;
+
+
+            
           
           
           //temp_tag的生成
@@ -586,6 +675,7 @@ item Parser::CLOSURE(item t)
           }
           else
           {
+            
             join(temp_tag, mfirst(t.grammar_item[i].pos_point + 1, t.grammar_item[i].index_grammar, t.tag_reduced[i]));
           }
           

@@ -321,6 +321,8 @@ Lexer::Lexer()
   reserve(token_make(CHAR, lexeme_str_make("char", l), t, 10));
   reserve(token_make(INCLUDE, lexeme_str_make("include", l), t, 11));
   reserve(token_make(GOTO, lexeme_str_make("goto", l), t, 12));
+  reserve(token_make(STRUCT, lexeme_str_make("struct", l), t, 13));
+  reserve(token_make(RETURN, lexeme_str_make("return", l), t, 14));
 }
 
 void Lexer::reserve(Token t)
