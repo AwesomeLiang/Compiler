@@ -29,15 +29,18 @@ typedef enum
   RSP = 286/*右小括号')' */, LMP = 287/*左中括号'{' */, RMP = 288/*右中括号'}' */,
   RETURN = 289, SEMICOLON = 290,/*分号';' */ COMMA = 291/*逗号*/, LBP = 292, RBP = 293,
   CHAR = 294, STRING = 295, CH = 296, ADD = 297, SUB = 298, INCLUDE = 299, POINT = 300,
-  MUL = 301, DIV = 302, FINISH = 303,GOTO = 304,VOID = 305, STRUCT = 306
+  MUL = 301, DIV = 302, FINISH = 303, GOTO = 304, VOID = 305, STRUCT = 306, CALL = 307,
+  PARAM = 308, LABEL = 309
+  //每次新加入关键字都需要在symbol的key里增加
 } tag;
-
+ 
 struct lexeme_value
 {
   string str;
   double real;
   int num;
 };
+
 
 class Token
 {

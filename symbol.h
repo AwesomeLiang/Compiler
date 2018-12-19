@@ -29,9 +29,9 @@ struct Node_Type;
 
 struct  TPoint
 {
-  Node_Array *point_array; // 用于多维数组
+  vector<Node_Array>  point_array; // 用于多维数组
   vector<Node_Struct> point_struct;//数组的单个元素是结构体
-  void *Null; // 数组的单个元素是int这类的基本类型
+  int Void; // 数组的单个元素是int这类的基本类型  标记TPOINT是否指向空
 };
 
 struct Node_Type
@@ -71,7 +71,7 @@ struct Node_Type
   int level;//函数静态层次嵌套号 （可能是用来查符号list）
   int off;//区距
   int numf;//参数个数
-  Node_Param* param; //指向函数形参表的指针
+  vector<Node_Param> vparam; //指向函数形参表的指针
   int entry;//函数目标程序首地址（运行时填写）
 };
 
@@ -79,21 +79,31 @@ struct Node_Type
 
 
 
-
-
  typedef int Node_Num;
- typedef int Node_Real;
+ typedef double Node_Real;
  typedef int Node_Length;
 
  struct Node_Vall
 {
-
+   //sp
+   //top
+   //old sp
+   //返回地址
+   //参数个数
+   //形式单元
+   //局部变量
+   //内情向量
+   //临时单元
+   
 };
 
 
  struct Node_Param
 {
-
+   string pname;
+   Index_4D ptype;
+   Catalog pcat;
+   int poffset;//生成活动记录的时候填写
 };
 
 
@@ -102,8 +112,8 @@ struct  Addr
   vector<Node_Vall> *point_vall;  //活动记录表的指针
   vector<Node_Num> *point_num; // 常整数表的指针
   vector<Node_Real> *point_real; // 常实数表的指针
-  int length; //结构体长度
-  vector<Node_Process> *point_process; // 函数表的指针
+  int length = -1; //结构体长度
+  Node_Process point_process; // 函数表的指针
 };
 
 struct Node_Id_1
@@ -118,15 +128,8 @@ struct Node_Id_1
 
 
 
-/*
-关键字表类型为0
-label表的类型为1
-分隔符表类型为2（+ - * / or and !）
-id 表类型为3
-常整数表类型为4
-常实数表类型为5
-type表类型为6
-*/
+
+
 
 struct Node_Id_2
 {
@@ -138,6 +141,19 @@ struct Node_Id_2
 typedef vector<Node_Id_2> Table_Id_2,Node_Id_3;
 typedef vector<Node_Id_3> Table_Id_3;
 
+struct attribute
+{
+  tag attributeKey;
+  Node_Id_1 attributeId;
+  int attributeInt;
+  double attributeReal;
+  vector<int> attributeLink;
+  Node_Param attributeParam;
+
+
+};
+
+
 
 
 class Symbol
@@ -148,17 +164,19 @@ public:
   vector<Node_Num> table_num;
   vector<Node_Real> table_real;
   vector<Node_Length> table_length;
-  vector<Node_Process> table_process;
   vector<Node_Param> table_param;
+  Node_Param node_process;
   vector<Node_Struct> table_struct;
   vector<Node_Type> table_type;
   vector<Node_Vall> table_vall;
   vector<int> table_label;
   vector<tag> table_key;
+  vector<vector<int>> table_link;
   Index_4D type;
   Catalog catalog;
   int offset;//用于计算域名区距
   int num_t;
+  int num_f;
   int mode; // 用于区分结构体的表创建和id表 1 是结构体表
   int index_deep_now;
   int index_func_now;
@@ -166,5 +184,35 @@ public:
   int space[100]; //最多分配100层空间
   stack<Node_Id_1> stack_node_id;
   Symbol();
-
+  void table_keyInit();
+  void table_typeInit();
+  void show_TVal(TVal t);
+  void show_Cat(Catalog cat);
+  void show_func(Node_Process node_process);
+  Index_4D findId(string idname,TVal tval);
+  int findDnameLink (Index_4D index_arg);
+  int findDname(string Dname);
+  TVal getTVal(Index_4D index_arg1);
+  Index_4D getIdIndexType(Index_4D index_id);
+  Catalog getIdCat(Index_4D index_id);
+  int addressReturn;
+};
+class Node
+{
+public:
+  int kindNode;
+  /*
+  关键字表类型为0
+  id 表类型为3
+  常整数表类型为4
+  常实数表类型为5
+  type表类型为6
+  link表类型为7
+  参数类型为8
+  */
+  attribute attributeNode;
+  Node();
+  Node(int kind, attribute att);
+  void init(int kind, attribute att);
+  void init(Index_4D index, Symbol symbol);
 };

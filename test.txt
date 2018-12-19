@@ -1,1 +1,19 @@
-3-4#
+int a,b;
+struct p{ int b ;} ;
+struct s{int a; struct p mb;} ;
+int try(int a,int b)
+{
+	double z,x;
+ 	z = x;
+		
+}
+int main()
+{
+	
+	  while(a)
+         {
+ 	   a = a+b;
+	 }
+	try(a,b);
+}
+#

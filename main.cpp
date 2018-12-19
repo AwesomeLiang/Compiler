@@ -26,8 +26,11 @@ causeIF Label 需要减少一个
 */
 
 // todo        移进归约冲突的解决  目前看到 8->264  移进  69->305 归约 冲突， 选择归约   悬空else选择移进
-//  catF 的放置， catF规约后才能归约VarDec ，
+//  catF 的放置， catF规约后才能归约VarDec ，考虑将VarDec压栈，等到LP推出的时候弹栈然后改类型
 //左递归可能还有问题
+// Bool 类型的错误判断还没写  分隔符和关键字的类型需要区分吗？
+//在EXP中使用结构体成员还没实现，错误处理，以及offset还没检验
+
 void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
 {
   c.push_back((tag)0);//Program
@@ -107,6 +110,11 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   c.push_back((tag)69);//catF
   c.push_back((tag)70);//S
   c.push_back(EQ);//71  EQ
+  c.push_back(POINT);//72 POINT
+  c.push_back((tag)73);//73 SDec
+  c.push_back((tag)74);//74 Dnamelist
+  c.push_back((tag)75);//75 Dname
+  c.push_back((tag)76);//75 FDec
 
   k.push_back(1);
   k.push_back(1);
@@ -183,24 +191,29 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   k.push_back(1);
   k.push_back(1);
   k.push_back(0);
+  k.push_back(0);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
 
   vector<int> temp_grammar;
 
 
-  //S->PROGRAM
+  //S->PROGRAM  0
   temp_grammar.clear();
   temp_grammar.push_back(70);
   temp_grammar.push_back(0);
   g.push_back(temp_grammar);
 
-  //Program->labelTop ExtDefList
+  //Program->labelTop ExtDefList 1
   temp_grammar.clear();
   temp_grammar.push_back(0);
   temp_grammar.push_back(1);
   temp_grammar.push_back(2);
   g.push_back(temp_grammar);
 
-  //labelTop->VOID
+  //labelTop->VOID 2
   temp_grammar.clear();
   temp_grammar.push_back(1);
   temp_grammar.push_back(41);
@@ -208,7 +221,7 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
 
 
 
-  //ExtDefList->ExtDef  ExtDefList
+  //ExtDefList->ExtDef  ExtDefList 3
   temp_grammar.clear();
   temp_grammar.push_back(2);
   temp_grammar.push_back(3);
@@ -216,14 +229,14 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   g.push_back(temp_grammar);
 
 
-  //ExtDefList->VOID
+  //ExtDefList->VOID 4
   temp_grammar.clear();
   temp_grammar.push_back(2);
   temp_grammar.push_back(41);
   g.push_back(temp_grammar);
 
 
-  //ExtDef->Specifier  ExtDecList  SEMI
+  //ExtDef->Specifier  ExtDecList  SEMI 5
   temp_grammar.clear();
   temp_grammar.push_back(3);
   temp_grammar.push_back(4);
@@ -232,14 +245,14 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   g.push_back(temp_grammar);
 
 
-  //ExtDef->Specifier  SEMI
+  //ExtDef->Specifier  SEMI 6
   temp_grammar.clear();
   temp_grammar.push_back(3);
   temp_grammar.push_back(4);
   temp_grammar.push_back(42);
   g.push_back(temp_grammar);
 
-  //ExtDef->Specifier  FunDec  CompSt
+  //ExtDef->Specifier  FunDec  CompSt 7
   temp_grammar.clear();
   temp_grammar.push_back(3);
   temp_grammar.push_back(4);
@@ -247,7 +260,7 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(7);
   g.push_back(temp_grammar);
 
-  //ExtDecList->VarDec
+  //ExtDecList->VarDec 8
   temp_grammar.clear();
   temp_grammar.push_back(5);
   temp_grammar.push_back(8);
@@ -255,12 +268,7 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
 
 
 
-
-
-
-
-
-  //ExtDeclist->VarDec  ASSIGN Exp
+  //ExtDeclist->VarDec  ASSIGN Exp 9
   temp_grammar.clear();
   temp_grammar.push_back(5);
   temp_grammar.push_back(8);
@@ -268,7 +276,7 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(9);
   g.push_back(temp_grammar);
 
-  //ExtDecList->ExtDecList  COMMA  VarDec
+  //ExtDecList->ExtDecList  COMMA  VarDec 10
   temp_grammar.clear();
   temp_grammar.push_back(5);
   temp_grammar.push_back(5);
@@ -276,7 +284,7 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(8);
   g.push_back(temp_grammar);
 
-  //ExtDeclist->ExtDecList  COMMA  VarDec  ASSIGN Exp
+  //ExtDeclist->ExtDecList  COMMA  VarDec  ASSIGN Exp 11
   temp_grammar.clear();
   temp_grammar.push_back(5);
   temp_grammar.push_back(5);
@@ -286,14 +294,14 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(9);
   g.push_back(temp_grammar);
 
-  //Specifier->TYPE
+  //Specifier->TYPE 12
   temp_grammar.clear();
   temp_grammar.push_back(4);
   temp_grammar.push_back(10);
   g.push_back(temp_grammar);
 
-
-  //TYPE->INT
+   
+  //TYPE->INT 13
   temp_grammar.clear();
   temp_grammar.push_back(10);
   temp_grammar.push_back(44);
@@ -379,11 +387,11 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   g.push_back(temp_grammar);
 
 
-  //FunDec->catF VarDec  LP  VarList  RP 
+  //FunDec-> VarDec catF LP  VarList  RP 
   temp_grammar.clear();
   temp_grammar.push_back(6);
-  //temp_grammar.push_back(69);
   temp_grammar.push_back(8);
+  temp_grammar.push_back(69);
   temp_grammar.push_back(52);
   temp_grammar.push_back(16);
   temp_grammar.push_back(53);
@@ -396,11 +404,11 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(41);
   g.push_back(temp_grammar);
 
-  //FunDec->catF VarDec  LP  RP
+  //FunDec-> VarDec catF LP  RP
   temp_grammar.clear();
   temp_grammar.push_back(6);
-  //temp_grammar.push_back(69);
   temp_grammar.push_back(8);
+  temp_grammar.push_back(69);
   temp_grammar.push_back(52);
   temp_grammar.push_back(53);
   g.push_back(temp_grammar);
@@ -499,7 +507,6 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(9);
   temp_grammar.push_back(22);
   temp_grammar.push_back(53);
-  temp_grammar.push_back(23);
   temp_grammar.push_back(21);
   temp_grammar.push_back(23);
   g.push_back(temp_grammar);
@@ -526,7 +533,6 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(9);
   temp_grammar.push_back(22);
   temp_grammar.push_back(53);
-  temp_grammar.push_back(23);
   temp_grammar.push_back(21);
   temp_grammar.push_back(24);
   temp_grammar.push_back(56);
@@ -554,7 +560,6 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(9);
   temp_grammar.push_back(53);
   temp_grammar.push_back(26);
-  temp_grammar.push_back(23);
   temp_grammar.push_back(21);
   temp_grammar.push_back(27);
   temp_grammar.push_back(23);
@@ -734,6 +739,7 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(34);
   g.push_back(temp_grammar);
   */
+  
 
   
   //Rel->Add
@@ -826,18 +832,18 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(65);
   g.push_back(temp_grammar);
 
-  //Factor->ID  LP  RP
+  //Factor->FDec  LP  RP
   temp_grammar.clear();
   temp_grammar.push_back(36);
-  temp_grammar.push_back(46);
+  temp_grammar.push_back(76);
   temp_grammar.push_back(52);
   temp_grammar.push_back(53);
   g.push_back(temp_grammar);
 
-  //Factor->ID  LP  Args  RP
+  //Factor->FDec  LP  Args  RP
   temp_grammar.clear();
   temp_grammar.push_back(36);
-  temp_grammar.push_back(46);
+  temp_grammar.push_back(76);
   temp_grammar.push_back(52);
   temp_grammar.push_back(31);
   temp_grammar.push_back(53);
@@ -845,8 +851,52 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
 
   
   
+  
+  
+  
+  
+  //Leftval->SDec  POINT DnameList
+  temp_grammar.clear();
+  temp_grammar.push_back(32);
+  temp_grammar.push_back(73);
+  temp_grammar.push_back(72);
+  temp_grammar.push_back(74);
+  g.push_back(temp_grammar);
+  //SDec->ID
+  temp_grammar.clear();
+  temp_grammar.push_back(73);
+  temp_grammar.push_back(46);
+  g.push_back(temp_grammar);
+  //DnameList -> Dnamelist Point Dname
+  temp_grammar.clear();
+  temp_grammar.push_back(74);
+  temp_grammar.push_back(74);
+  temp_grammar.push_back(72);
+  temp_grammar.push_back(75);
+  g.push_back(temp_grammar);
+  //DnameList->Dname
+  temp_grammar.clear();
+  temp_grammar.push_back(74);
+  temp_grammar.push_back(75);
+  g.push_back(temp_grammar);
+  //Dname->ID
+  temp_grammar.clear();
+  temp_grammar.push_back(75);
+  temp_grammar.push_back(46);
+  g.push_back(temp_grammar);
+  //Leftval->SDec  POINT DnameList
+  temp_grammar.clear();
+  temp_grammar.push_back(36);
+  temp_grammar.push_back(73);
+  temp_grammar.push_back(72);
+  temp_grammar.push_back(74);
+  g.push_back(temp_grammar);
 
-
+  //FDec->ID
+  temp_grammar.clear();
+  temp_grammar.push_back(76);
+  temp_grammar.push_back(46);
+  g.push_back(temp_grammar);
 
 }
 void runLr()
@@ -1076,7 +1126,7 @@ void readTable(map<index, key> &table, string filename,Parser parser)
 {
   
   ifstream fin(filename);
-  for (int i = 0; i <= 1564; ++i)
+  for (int i = 0; i <= 2123; ++i)
   {
     index temp_index;
     fin >> temp_index.state;
@@ -1096,8 +1146,12 @@ void readTable(map<index, key> &table, string filename,Parser parser)
   }
 }
 
+
+
+
 int main()
 {
+
   string str;
   str = readFileIntoString("test.txt");
   cout << str << endl;
@@ -1122,15 +1176,66 @@ int main()
 
   }
 
-
+  cout << "over15 -1,over66-2" << endl;
   test(g, c, k);
   parser.init(g, c, k, l, token_line);
+
 
 
   readTable(parser.table_analyse, "table.txt", parser);
 
 
+
+
   parser.action();
+  for (int i = 0; i < (int)parser.infer.symbol.table_id_3.size(); ++i)
+  {
+    cout << "Deep " << i << " " << endl;
+    for (int j = 0; j < (int)parser.infer.symbol.table_id_3[i].size(); ++j)
+    {
+      cout << "Func" << j << "  " << "PDeep " << parser.infer.symbol.table_id_3[i][j].parent.indexDeep << " " << parser.infer.symbol.table_id_3[i][j].parent.indexFunc << " " << endl;
+      cout << "name" << '\t' << "cat" << '\t' << "kind" << '\t' << "addr" << endl;
+      for (int k = 0; k < (int)parser.infer.symbol.table_id_3[i][j].table_id_1.size(); ++k)
+      {
+        cout << parser.infer.symbol.table_id_3[i][j].table_id_1[k].name << '\t';
+        parser.infer.symbol.show_Cat(parser.infer.symbol.table_id_3[i][j].table_id_1[k].cat);
+        cout << '\t';
+        parser.infer.symbol.show_TVal(parser.infer.symbol.table_type[parser.infer.symbol.table_id_3[i][j].table_id_1[k].point_type.indexItem].tval);
+        cout << endl;
+        if (parser.infer.symbol.table_id_3[i][j].table_id_1[k].cat == f)
+        {
+          cout << "Node_Process" << endl;
+          parser.infer.symbol.show_func(parser.infer.symbol.table_id_3[i][j].table_id_1[k].addr.point_process);
+        }
+        // cout << '\t'<< parser.infer.symbol.table_id_3[i][j].table_id_1[k].addr;
+        cout << endl;
+      }
+      cout << endl;
+    }
+  }
+  /*
+  for (int i = 0; i < (int)parser.infer.sequence_temp.size(); ++i)
+  {
+  cout << "< (" << parser.infer.sequence_temp[i].op.indexKind << "," << parser.infer.symbol.table_key[parser.infer.sequence_temp[i].op.indexItem] << ")" << '\t';
+  cout << "(" << parser.infer.sequence_temp[i].arg1.indexKind << "," << parser.infer.sequence_temp[i].arg1.indexDeep << "," << parser.infer.sequence_temp[i].arg1.indexFunc << "," << parser.infer.sequence_temp[i].arg1.indexItem << ")" << '\t';
+  cout << "(" << parser.infer.sequence_temp[i].arg2.indexKind << "," << parser.infer.sequence_temp[i].arg2.indexDeep << "," << parser.infer.sequence_temp[i].arg2.indexFunc << "," << parser.infer.sequence_temp[i].arg2.indexItem << ")" << '\t';
+  cout << "(" << parser.infer.sequence_temp[i].result.indexKind << "," << parser.infer.sequence_temp[i].result.indexDeep << "," << parser.infer.sequence_temp[i].result.indexFunc << "," << parser.infer.sequence_temp[i].result.indexItem << ")" << '\t';
+  cout << ">" << endl;
+  }
+  */
+  parser.infer.showSequence();
+  
+  cout << "print table_link" << endl;
+  for (int i = 0; i < (int)parser.infer.symbol.table_link.size(); ++i)
+  {
+    for (int j = 0; j < (int)parser.infer.symbol.table_link[i].size(); ++j)
+    {
+      cout << parser.infer.symbol.table_link[i][j] << " ";
+    }
+    cout << endl;
+  }
+
+  
   getchar();
   return 0;
 }

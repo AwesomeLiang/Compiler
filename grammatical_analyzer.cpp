@@ -148,7 +148,7 @@ void Parser::action()
     switch (table_analyse[temp_index].V)
     {
     case 997: // move
-      cout << "move" << temp_index.state << " " << character[temp_index.V] << endl;
+      //cout << "move" << temp_index.state << " " << character[temp_index.V] << endl;
       stack_state.push(table_analyse[temp_index].state);
       
       stack_op.push(t);
@@ -156,8 +156,8 @@ void Parser::action()
       break;
     case 999: // reduced  找到产生式，A->β ，连续弹栈length(β)次，接着把栈顶状态和A产生的新状态压入状态栈中，A压入符号栈中 当前输入符号不变
       
-      //infer.work(table_analyse[temp_index].state, token_line, pos);
-      cout << "reduced" << temp_index.state << " " << character[temp_index.V] << endl;
+      infer.work(table_analyse[temp_index].state, token_line, pos);
+     // cout << "reduced" << temp_index.state << " " << character[temp_index.V] << endl;
       if (character[grammar[table_analyse[temp_index].state][1]] != VOID) // 8是$
       {
         int length;

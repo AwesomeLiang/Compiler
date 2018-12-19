@@ -8,10 +8,12 @@
 
 struct quaternary
 {
-  Index_4D op;
-  Index_4D arg1;
-  Index_4D arg2;
-  Index_4D result;
+  Node op;
+  Node arg1;
+  Node arg2;
+  Node result;
+  quaternary* pointJmp  = NULL;
+  quaternary();
 };
 class Infer
 {
@@ -23,6 +25,6 @@ public:
   Symbol symbol;
   void work(int index_grammar,vector<Token> token_line, int pos);
   void work_LL(int index_grammar, int pos,stack<int> & stack_state);
- 
+  void showSequence();
 };
 
