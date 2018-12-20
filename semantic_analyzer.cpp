@@ -2315,3 +2315,14 @@ quaternary::quaternary()
   arg2.kindNode = -1;
   result.kindNode = -1;
 }
+
+ostream & operator<<(ostream & os, const quaternary & qd) {
+	os << "(" << qd.op << ", " << qd.arg1 << ", " << qd.arg2 << ", " << qd.result
+		<< ")";
+
+	if (qd.pointJmp) {
+		os << "jump->" << *qd.pointJmp;
+	}
+	os << endl;
+	return os;
+}

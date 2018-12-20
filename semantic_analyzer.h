@@ -8,15 +8,32 @@
 
 struct quaternary
 {
-  Node op;
-  Node arg1;
-  Node arg2;
-  Node result;
-  bool activeArg1;
-  bool activeArg2;
-  bool activeRes;
-  quaternary* pointJmp = NULL;
-  quaternary();
+	tag op;
+	Node arg1;
+	Node arg2;
+	Node result;
+	bool activeArg1;
+	bool activeArg2;
+	bool activeRes;
+	quaternary* pointJmp = NULL;
+	quaternary();
+
+
+	friend bool isBinary(tag) {}
+	friend bool isUnary(tag) {}
+	friend bool isExchangeable(tag) {}
+	friend bool isJump(tag) {}
+
+  friend ostream& operator<<(ostream& os, const quaternary& qd);
+
+
+  quaternary(tag op, Node arg1, Node arg2, Node res) : op(op), arg1(arg1), arg2(arg2), result (res) {
+	  activeArg1 = false;
+	  activeArg2 = false;
+	  activeRes = false;
+  }
+
+
 };
 class Infer
 {

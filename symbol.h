@@ -241,6 +241,7 @@ class Node
 public:
 	int kindNode;
 	/*
+	-1为空结点
 	关键字表类型为0
 	id 表类型为3
 	常整数表类型为4
@@ -250,11 +251,15 @@ public:
 	参数类型为8
 	*/
 	attribute attributeNode;
-	Node();
+	Node() {
+		this->kindNode = -1;
+	}
 	Node(int kind, attribute att);
 	void init(int kind, attribute att);
 	void init(Index_4D index, Symbol symbol);
 	Node_Type getTypeNode(Index_4D index_type, Symbol symbol);
+
+	
 
 	Node(int kindNode, string name, Catalog cat) {
 		if (kindNode == 3) {
@@ -307,6 +312,8 @@ public:
 		}
 		return out;
 	}
+
+	bool isVoid() { return kindNode == -1; }
 
 	bool isVar() {
 		if (kindNode != 3) {
