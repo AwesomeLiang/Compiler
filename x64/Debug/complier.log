@@ -1,0 +1,5 @@
+﻿  main.cpp
+c:\users\hasee\desktop\compiler\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\grammatical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  complier.vcxproj -> C:\Users\hasee\Desktop\compiler\x64\Debug\complier.exe
