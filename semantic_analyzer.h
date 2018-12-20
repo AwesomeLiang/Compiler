@@ -8,7 +8,7 @@
 
 struct quaternary
 {
-  Node op;
+  tag op;
   Node arg1;
   Node arg2;
   Node result;

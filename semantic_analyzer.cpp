@@ -173,11 +173,11 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_result = stack_infer.top();
     stack_infer.pop();
 
-    if (symbol.getIndexTVal(index_arg1) != symbol.getIndexTVal(index_result))
+    if (symbol.getItemType(index_arg1) != symbol.getItemType(index_result))
     {
       cout << "case 9: //ExtDeclist->VarDec  ASSIGN Exp-------------kind not match" << endl;
     }
-    quaternary_ASSIGN.op.init(index_op,symbol);
+    quaternary_ASSIGN.op = ASSIGN;
     quaternary_ASSIGN.arg1.init(index_arg1,symbol) ;
     quaternary_ASSIGN.result.init(index_result,symbol);
     sequence_temp.push_back(quaternary_ASSIGN);
@@ -217,11 +217,11 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_result = stack_infer.top();
     stack_infer.pop();
 
-    if (symbol.getIndexTVal(index_arg1) != symbol.getIndexTVal(index_result))
+    if (symbol.getItemType(index_arg1) != symbol.getItemType(index_result))
     {
       cout << "case 11: //ExtDeclist->ExtDecList  COMMA  VarDec  ASSIGN Exp-------------kind not match" << endl;
     }
-    quaternary_ASSIGN.op.init(index_op,symbol);
+    quaternary_ASSIGN.op = ASSIGN;
     quaternary_ASSIGN.arg1.init(index_arg1,symbol);
     quaternary_ASSIGN.result.init(index_result,symbol);
     sequence_temp.push_back(quaternary_ASSIGN);
@@ -622,7 +622,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
 
     }
     quaternary quaternary_if;
-    quaternary_if.op.init(index_if,symbol);
+    quaternary_if.op = IF;
     quaternary_if.arg1.init(index_exp,symbol)  ;
     quaternary_if.result.init(index_label,symbol);
     sequence_temp.push_back(quaternary_if);
@@ -647,7 +647,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         break;
       }
     }
-    quaternary_LABEL.op.init(index_label,symbol);
+    quaternary_LABEL.op = LABEL;
     sequence_temp.push_back(quaternary_LABEL);
     sequence_temp[index_temp].pointJmp = &sequence_temp[(int)sequence_temp.size()-1];
     
@@ -682,7 +682,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     stack_infer.push(index_label1);
     stack_infer.push(index_temp);
     quaternary quaternary_bgoto;
-    quaternary_bgoto.op.init(index_goto,symbol);
+    quaternary_bgoto.op = GOTO;
     quaternary_bgoto.arg1.init(index_label1,symbol);
     sequence_temp.push_back(quaternary_bgoto);
   }
@@ -725,7 +725,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
 
     }
     quaternary quaternary_WHILE;
-    quaternary_WHILE.op.init(index_while,symbol);
+    quaternary_WHILE.op = WHILE;
     quaternary_WHILE.arg1.init(index_exp,symbol);
     quaternary_WHILE.result.init(index_label1,symbol);
     sequence_temp.push_back(quaternary_WHILE);
@@ -749,7 +749,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
         break;
       }
     }
-    quaternary_LABEL.op.init(index_label,symbol);
+    quaternary_LABEL.op = LABEL;
     sequence_temp.push_back(quaternary_LABEL);
   }
     break;
@@ -776,7 +776,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
 
 
     quaternary quaternary_GOTO;
-    quaternary_GOTO.op.init(index_goto,symbol);
+    quaternary_GOTO.op = GOTO;
     quaternary_GOTO.arg1.init(index_temp,symbol);
     quaternary_GOTO.pointJmp = &sequence_temp[index_temp.indexItem];
    
@@ -837,11 +837,11 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_result = stack_infer.top();
     stack_infer.pop();
 
-    if (symbol.getIndexTVal(index_arg1) != symbol.getIndexTVal(index_result))
+    if (symbol.getItemType(index_arg1) != symbol.getItemType(index_result))
     {
       cout << "case 52://Dec->VarDec    ASSIGNOP  Exp-------------kind not match" << endl;
     }
-    quaternary_ASSIGN.op.init(index_op,symbol);
+    quaternary_ASSIGN.op = ASSIGN;
     quaternary_ASSIGN.arg1.init(index_arg1,symbol);
     quaternary_ASSIGN.result.init(index_result,symbol);
     sequence_temp.push_back(quaternary_ASSIGN);
@@ -881,7 +881,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_param.indexDeep = 0;
     index_param.indexFunc = index_func.indexItem;
     index_param.indexItem = symbol.num_f;
-    quaternary_PARAM.op.init(index_op,symbol);
+    quaternary_PARAM.op = PARAM;
     quaternary_PARAM.arg1.init(index_param, symbol);
     sequence_temp.push_back(quaternary_PARAM);
     //参数的解析 func为定义对应的函数 item为它在param表中的位置，8是种类
@@ -922,7 +922,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_param.indexDeep = 0;
     index_param.indexFunc = index_func.indexItem;
     index_param.indexItem = symbol.num_f;
-    quaternary_PARAM.op.init(index_op, symbol);
+    quaternary_PARAM.op = PARAM;
     quaternary_PARAM.arg1.init(index_param, symbol);
     sequence_temp.push_back(quaternary_PARAM);
     //参数的解析 func为定义对应的函数 item为它在param表中的位置，8是种类
@@ -956,12 +956,12 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     Index_4D index_result;
     index_result = stack_infer.top();
 
-    if (symbol.getIndexTVal(index_arg1) != symbol.getIndexTVal(index_result))
+    if (symbol.getItemType(index_arg1) != symbol.getItemType(index_result))
     {
       cout << "case 55://Exp->LeftVal    ASSIGNOP  Exp-------------kind not match" << endl;
     }
 
-    quaternary_ASSIGN.op.init(index_op,symbol);
+    quaternary_ASSIGN.op = ASSIGN;
     quaternary_ASSIGN.arg1.init(index_arg1,symbol);
     quaternary_ASSIGN.result.init(index_result,symbol);
     sequence_temp.push_back(quaternary_ASSIGN);
@@ -1028,19 +1028,41 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
    (declare, , a);
    (=,1 , a[10][9]->offset length);*/
     //假设ADD只能是常整数
+    
     Index_4D index_num = stack_infer.top();
     stack_infer.pop();
     if (symbol.table_type[symbol.indexIdTemp.indexItem].tpoint.point_array.low > symbol.getNum(index_num)
       || symbol.table_type[symbol.indexIdTemp.indexItem].tpoint.point_array.up < symbol.getNum(index_num))
     {
-      cout << "case 59://LeftVal->ArrVal  useA LB  Add   RB ----------- array over bound" << endl;
+      cout << " case 59://LeftVal->ArrVal  useA LB  Add   RB----------- array over bound" << endl;
     }
-    symbol.table_array.push_back(index_num);
-    
+   
     Index_4D index_array = stack_infer.top();
     stack_infer.pop();
-    index_array.indexKind = 9;
-    stack_infer.push(index_array);
+    
+    symbol.indexIdTemp = symbol.table_type[symbol.indexIdTemp.indexItem].tpoint.point_array.ctp;
+    
+    Node_Id_1 temp_id;
+    temp_id.name = "t";
+    name_make(symbol.num_t,temp_id.name);
+    symbol.num_t++;
+    temp_id.point_type = symbol.indexIdTemp;
+    temp_id.cat = v;
+    
+    Index_4D index_temp;
+    index_temp.indexDeep = symbol.index_deep_now;
+    index_temp.indexFunc = symbol.index_func_now;
+    index_temp.indexKind = 3;
+    index_temp.indexItem = (int)symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.size();
+    symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.push_back(temp_id);
+    stack_infer.push(index_temp);
+    
+    quaternary quaternary_SHIFT;
+    quaternary_SHIFT.op = SHIFT;
+    quaternary_SHIFT.arg1.init(index_array, symbol);
+    quaternary_SHIFT.arg2.init(index_num, symbol);
+    quaternary_SHIFT.result.init(index_temp, symbol);
+    sequence_temp.push_back(quaternary_SHIFT);
 
   }
     break;
@@ -1119,7 +1141,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_result = stack_infer.top();
 
 
-    quaternary_OR.op.init(index_op,symbol);
+    quaternary_OR.op = OR;
     quaternary_OR.arg1.init(index_arg1,symbol);
     quaternary_OR.arg2.init(index_arg2,symbol);
     quaternary_OR.result.init(index_result,symbol);
@@ -1194,7 +1216,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     Index_4D index_result;
     index_result = stack_infer.top();
 
-    quaternary_AND.op.init(index_op,symbol);
+    quaternary_AND.op = AND;
     quaternary_AND.arg1.init(index_arg1,symbol) ;
     quaternary_AND.arg2.init(index_arg2,symbol);
     quaternary_AND.result.init(index_result,symbol);
@@ -1257,7 +1279,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     Index_4D index_result;
     index_result = stack_infer.top();
 
-    quaternary_NOT.op.init(index_op,symbol);
+    quaternary_NOT.op = NOT;
     quaternary_NOT.arg1.init(index_arg1,symbol);
     quaternary_NOT.result.init(index_result,symbol);
     sequence_temp.push_back(quaternary_NOT);
@@ -1267,7 +1289,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
   case 67://Add->Add  PLUS  Term
   {
     //还需要把新产生的变量放到符号表中
-    quaternary quaternary_OR;
+    quaternary quaternary_ADD;
 
     Index_4D index_op;
     index_op.indexDeep = -1;
@@ -1329,17 +1351,18 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     Index_4D index_result;
     index_result = stack_infer.top();
 
-    quaternary_OR.op.init(index_op, symbol);
-    quaternary_OR.arg1.init(index_arg1, symbol);
-    quaternary_OR.result.init(index_result, symbol);
-    sequence_temp.push_back(quaternary_OR);
+    quaternary_ADD.op = ADD;
+    quaternary_ADD.arg1.init(index_arg1, symbol);
+    quaternary_ADD.arg2.init(index_arg2, symbol);
+    quaternary_ADD.result.init(index_result, symbol);
+    sequence_temp.push_back(quaternary_ADD);
 
   }
   break;
   case 68://Add->Add  MINUS  Term
   {
     //还需要把新产生的变量放到符号表中
-    quaternary quaternary_ADD;
+    quaternary quaternary_SUB;
 
     Index_4D index_op;
     index_op.indexDeep = -1;
@@ -1398,17 +1421,18 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     Index_4D index_result;
     index_result = stack_infer.top();
 
-    quaternary_ADD.op.init(index_op, symbol);
-    quaternary_ADD.arg1.init(index_arg1, symbol);
-    quaternary_ADD.result.init(index_result, symbol);
-    sequence_temp.push_back(quaternary_ADD);
+    quaternary_SUB.op = SUB;
+    quaternary_SUB.arg1.init(index_arg1, symbol);
+    quaternary_SUB.arg2.init(index_arg2, symbol);
+    quaternary_SUB.result.init(index_result, symbol);
+    sequence_temp.push_back(quaternary_SUB);
 
   }
   break;
   case 69://Add->MINUS  Term
   {
     //还需要把新产生的变量放到符号表中
-    quaternary quaternary_NOT;
+    quaternary quaternary_SUB;
 
     Index_4D index_op;
     index_op.indexDeep = -1;
@@ -1435,48 +1459,9 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_tval.indexDeep = -1;
     index_tval.indexFunc = -1;
     index_tval.indexKind = 6;
-    int pos1;
-    if (index_arg1.indexKind == 3)
-    {
-      pos1 = symbol.table_id_3[index_arg1.indexDeep][index_arg1.indexFunc].table_id_1[index_arg1.indexItem].point_type.indexItem;
-    }
-    else if (index_arg1.indexKind == 4)
-    {
-      //操作数1是常整数
-      for (int i = 0; i < (int)symbol.table_type.size(); ++i)
-      {
-        if (symbol.table_type[i].tval == Int)
-        {
-          pos1 = i;
-          break;
-        }
-      }
+  
 
-    }
-    else if (index_arg1.indexKind == 5)
-    {
-      //操作数1是常实数
-      for (int i = 0; i < (int)symbol.table_type.size(); ++i)
-      {
-        if (symbol.table_type[i].tval == Real)
-        {
-          pos1 = i;
-          break;
-        }
-      }
-    }
-    else if (index_arg1.indexKind == 7)
-    {
-      pos1 = symbol.findDnameLink(index_arg1);
-      if (pos1 != 0 && pos1 != 1)
-        cout << " case 69://Add->MINUS  Term-------------arg1 type error" << endl;
-    }
-    else
-    {
-      //error;
-    }
-
-    TVal tval_temp = symbol.table_type[pos1].tval;
+    TVal tval_temp = symbol.getTVal(index_tval);
 
     for (int i = 0; i < (int)symbol.table_type.size(); ++i)
     {
@@ -1507,14 +1492,13 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     Index_4D index_result;
     index_result = stack_infer.top();
 
-    quaternary_NOT.op.init(index_op, symbol);
-    quaternary_NOT.arg1.init(index_arg1, symbol);
-    quaternary_NOT.result.init(index_result, symbol);
-    sequence_temp.push_back(quaternary_NOT);
+    quaternary_SUB.op = SUB;
+    quaternary_SUB.arg1.init(index_arg1, symbol);
+    quaternary_SUB.result.init(index_result, symbol);
+    sequence_temp.push_back(quaternary_SUB);
 
   }
   break;
-
   case 71://Term->Term  STAR  Factor
   {
     //还需要把新产生的变量放到符号表中
@@ -1548,88 +1532,9 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_tval.indexDeep = -1;
     index_tval.indexFunc = -1;
     index_tval.indexKind = 6;
-    int pos1;
-    int pos2;
-    if (index_arg1.indexKind == 3)
-    {
-      pos1 = symbol.table_id_3[index_arg1.indexDeep][index_arg1.indexFunc].table_id_1[index_arg1.indexItem].point_type.indexItem;
-    }
-    else if (index_arg1.indexKind == 4)
-    {
-      //操作数1是常整数
-      for (int i = 0; i < (int)symbol.table_type.size(); ++i)
-      {
-        if (symbol.table_type[i].tval == Int)
-        {
-          pos1 = i;
-          break;
-        }
-      }
+    
 
-    }
-    else if (index_arg1.indexKind == 5)
-    {
-      //操作数1是常实数
-      for (int i = 0; i < (int)symbol.table_type.size(); ++i)
-      {
-        if (symbol.table_type[i].tval == Real)
-        {
-          pos1 = i;
-          break;
-        }
-      }
-    }
-    else if (index_arg2.indexKind == 7)
-    {
-      pos1 = symbol.findDnameLink(index_arg1);
-      if (pos1 != 0 && pos1 != 1)
-        cout << " case 71://Term->Term  STAR  Factor-------------arg1 type error" << endl;
-    }
-    else
-    {
-      //error;
-    }
-    if (index_arg2.indexKind == 3)
-    {
-      pos2 = symbol.table_id_3[index_arg2.indexDeep][index_arg2.indexFunc].table_id_1[index_arg2.indexItem].point_type.indexItem;
-    }
-    else if (index_arg2.indexKind == 4)
-    {
-      //操作数1是常整数
-      for (int i = 0; i < (int)symbol.table_type.size(); ++i)
-      {
-        if (symbol.table_type[i].tval == Int)
-        {
-          pos2 = i;
-          break;
-        }
-      }
-
-    }
-    else if (index_arg2.indexKind == 5)
-    {
-      //操作数1是常实数
-      for (int i = 0; i < (int)symbol.table_type.size(); ++i)
-      {
-        if (symbol.table_type[i].tval == Real)
-        {
-          pos2 = i;
-          break;
-        }
-      }
-    }
-    else if (index_arg2.indexKind == 7)
-    {
-      pos2 = symbol.findDnameLink(index_arg2);
-      if (pos2 != 0 && pos2 != 1)
-        cout << " case 71://Term->Term  STAR  Factor-------------arg2 type error" << endl;
-    }
-    else
-    {
-      //error;
-    }
-
-    TVal tval_temp = judege(symbol.table_type[pos1].tval, symbol.table_type[pos2].tval); // 变量一 变量二 仲裁后的类型
+    TVal tval_temp = judege(symbol.getTVal(index_arg1),symbol.getTVal(index_arg2)); // 变量一 变量二 仲裁后的类型
 
     for (int i = 0; i < (int)symbol.table_type.size(); ++i)
     {
@@ -1658,8 +1563,9 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     Index_4D index_result;
     index_result = stack_infer.top();
 
-    quaternary_MUL.op.init(index_op, symbol);
+    quaternary_MUL.op = MUL;
     quaternary_MUL.arg1.init(index_arg1, symbol);
+    quaternary_MUL.arg2.init(index_arg2, symbol);
     quaternary_MUL.result.init(index_result, symbol);
     sequence_temp.push_back(quaternary_MUL);
 
@@ -1697,76 +1603,8 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     index_tval.indexDeep = -1;
     index_tval.indexFunc = -1;
     index_tval.indexKind = 6;
-    int pos1;
-    int pos2;
-    if (index_arg1.indexKind == 3)
-    {
-      pos1 = symbol.table_id_3[index_arg1.indexDeep][index_arg1.indexFunc].table_id_1[index_arg1.indexItem].point_type.indexItem;
-    }
-    else if (index_arg1.indexKind == 4)
-    {
-      //操作数1是常整数
-      for (int i = 0; i < (int)symbol.table_type.size(); ++i)
-      {
-        if (symbol.table_type[i].tval == Int)
-        {
-          pos1 = i;
-          break;
-        }
-      }
 
-    }
-    else if (index_arg1.indexKind == 5)
-    {
-      //操作数1是常实数
-      for (int i = 0; i < (int)symbol.table_type.size(); ++i)
-      {
-        if (symbol.table_type[i].tval == Real)
-        {
-          pos1 = i;
-          break;
-        }
-      }
-    }
-    else
-    {
-      //error;
-    }
-    if (index_arg2.indexKind == 3)
-    {
-      pos2 = symbol.table_id_3[index_arg2.indexDeep][index_arg2.indexFunc].table_id_1[index_arg2.indexItem].point_type.indexItem;
-    }
-    else if (index_arg2.indexKind == 4)
-    {
-      //操作数1是常整数
-      for (int i = 0; i < (int)symbol.table_type.size(); ++i)
-      {
-        if (symbol.table_type[i].tval == Int)
-        {
-          pos2 = i;
-          break;
-        }
-      }
-
-    }
-    else if (index_arg2.indexKind == 5)
-    {
-      //操作数1是常实数
-      for (int i = 0; i < (int)symbol.table_type.size(); ++i)
-      {
-        if (symbol.table_type[i].tval == Real)
-        {
-          pos2 = i;
-          break;
-        }
-      }
-    }
-    else
-    {
-      //error;
-    }
-
-    TVal tval_temp = judege(symbol.table_type[pos1].tval, symbol.table_type[pos2].tval); // 变量一 变量二 仲裁后的类型
+    TVal tval_temp = judege(symbol.getTVal(index_arg1), symbol.getTVal(index_arg2)); // 变量一 变量二 仲裁后的类型
 
     for (int i = 0; i < (int)symbol.table_type.size(); ++i)
     {
@@ -1795,8 +1633,9 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     Index_4D index_result;
     index_result = stack_infer.top();
 
-    quaternary_DIV.op.init(index_op, symbol);
+    quaternary_DIV.op = DIV;
     quaternary_DIV.arg1.init(index_arg1, symbol);
+    quaternary_DIV.arg1.init(index_arg2, symbol);
     quaternary_DIV.result.init(index_result, symbol);
     sequence_temp.push_back(quaternary_DIV);
 
@@ -1880,7 +1719,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
       }
 
     }
-    quaternary_CALL.op.init(index_op,symbol);
+    quaternary_CALL.op = CALL;
     quaternary_CALL.arg1.init(index_func,symbol);
     sequence_temp.push_back(quaternary_CALL);
   }
@@ -1912,7 +1751,7 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
       }
 
     }
-    quaternary_CALL.op.init(index_op, symbol);
+    quaternary_CALL.op = CALL;
     quaternary_CALL.arg1.init(index_func, symbol);
     sequence_temp.push_back(quaternary_CALL);
     
@@ -2093,8 +1932,29 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     {
       cout << "case 92://ArrVal->ArrVal  useA LB  Add   RB ----------- array over bound" << endl;
     }
-    symbol.table_array.push_back(index_num);
-    symbol.indexIdTemp = symbol.getIdIndexType(symbol.table_type[symbol.indexIdTemp.indexItem].tpoint.point_array.ctp);
+    Index_4D index_array = stack_infer.top();
+    stack_infer.pop();
+    symbol.indexIdTemp = symbol.table_type[symbol.indexIdTemp.indexItem].tpoint.point_array.ctp;
+    Node_Id_1 temp_id;
+    temp_id.name = "t";
+    name_make(symbol.num_t, temp_id.name);
+    symbol.num_t++;
+    temp_id.point_type = symbol.indexIdTemp;
+    temp_id.cat = v;
+    Index_4D index_temp;
+    index_temp.indexDeep = symbol.index_deep_now;
+    index_temp.indexFunc = symbol.index_func_now;
+    index_temp.indexKind = 3;
+    index_temp.indexItem = (int)symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.size();
+    symbol.table_id_3[symbol.index_deep_now][symbol.index_func_now].table_id_1.push_back(temp_id);
+    stack_infer.push(index_temp);
+
+    quaternary quaternary_SHIFT;
+    quaternary_SHIFT.op = SHIFT;
+    quaternary_SHIFT.arg1.init(index_array,symbol);
+    quaternary_SHIFT.arg2.init(index_num, symbol);
+    quaternary_SHIFT.result.init(index_temp,symbol);
+    sequence_temp.push_back(quaternary_SHIFT);
   }
     break;
   case 93://ArrVal->ID
@@ -2136,17 +1996,18 @@ void Infer::work(int index_grammar, vector<Token> token_line, int pos)
     }
     else
     {
-      // cout << "find it" << endl;
+       //cout << "find it" << endl;
       index_leftval.indexDeep = deep_temp;
       index_leftval.indexKind = 3;
       index_leftval.indexFunc = func_temp;
       index_leftval.indexItem = item_temp;
       if (symbol.getTVal(index_leftval) != Array)
         cout << "case 93://ArrVal->ID----------- it's not a array"<<endl;
+      
     }
     stack_infer.push(index_leftval);
     symbol.indexIdTemp = symbol.getIdIndexType(index_leftval);
-    symbol.table_array.push_back(index_leftval);
+    
   }
     break;
   /*
@@ -2314,62 +2175,11 @@ void Infer::work_LL(int index_grammar, int pos, stack<int> & stack_state)
 
 void Infer::showSequence()
 {
+  
   for (int i = 0; i < (int)sequence_temp.size(); ++i)
   {
-    cout <<"("<< sequence_temp[i].op.kindNode << ",";
-    switch (sequence_temp[i].op.kindNode)
-    {
-    case 0: // key
-    {
-      cout << sequence_temp[i].op.attributeNode.attributeKey << ")";
-    }
-      
-      break;
-    case 3://id
-    {
-      cout << sequence_temp[i].op.attributeNode.attributeId.name << ",";
-      symbol.show_Cat(sequence_temp[i].op.attributeNode.attributeId.cat);
-      cout << ",";
-      symbol.show_TVal(symbol.table_type[sequence_temp[i].op.attributeNode.attributeId.point_type.indexItem].tval);
-      cout << ")";
-    }
-      
-      break;
-    case 4://int
-    {
-      cout << sequence_temp[i].op.attributeNode.attributeInt<<")";
-    }
-      break;
-    case 5://real
-    {
-      cout << sequence_temp[i].op.attributeNode.attributeReal << ")";
-    }
-      break;
-    case 7://link
-    {
-      for (int i = 0; i < (int)sequence_temp[i].op.attributeNode.attributeLink.size(); ++i)
-      {
-        cout << sequence_temp[i].op.attributeNode.attributeLink[i] << " ";
-      }
-      cout << ")";
-      
-    }
-      break;
-    case 8://param
-    {
-      cout << sequence_temp[i].op.attributeNode.attributeParam.pname << ",";
-      symbol.show_Cat(sequence_temp[i].op.attributeNode.attributeParam.pcat);
-      cout << ",";
-      symbol.show_TVal(symbol.table_type[sequence_temp[i].op.attributeNode.attributeParam.ptype.indexItem].tval);
-      cout << "," << sequence_temp[i].op.attributeNode.attributeParam.poffset;
-      cout << ")";
-      
-    }
-      break;
-    default:
-      cout << "NULL)";
-      break;
-    }
+    cout <<"("<< sequence_temp[i].op <<")";
+
     cout << '\t';
 
     cout << "(" << sequence_temp[i].arg1.kindNode << ",";
@@ -2544,7 +2354,7 @@ void Infer::showSequence()
 
 quaternary::quaternary()
 {
-  op.kindNode = -1;
+  op = (tag)0;
   arg1.kindNode = -1;
   arg2.kindNode = -1;
   result.kindNode = -1;
