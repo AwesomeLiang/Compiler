@@ -1,5 +1,159 @@
-﻿  main.cpp
+﻿  dag.cpp
+c:\users\hasee\desktop\compiler\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\dag.cpp(29): error C2664: “std::shared_ptr<DagNode> Dag::find(std::string,DagNode)”: 无法将参数 1 从“tag”转换为“std::string”
+  c:\users\hasee\desktop\compiler\complier\dag.cpp(29): note: 没有可用于执行该转换的用户定义的转换运算符，或者无法调用该运算符
+c:\users\hasee\desktop\compiler\complier\dag.cpp(32): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(38): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(41): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(44): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(46): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(47): error C3536: “dnRest”: 初始化之前无法使用
+c:\users\hasee\desktop\compiler\complier\dag.cpp(48): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(50): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(55): error C2664: “std::shared_ptr<DagNode> Dag::find(std::string,DagNode)”: 无法将参数 1 从“tag”转换为“std::string”
+  c:\users\hasee\desktop\compiler\complier\dag.cpp(55): note: 没有可用于执行该转换的用户定义的转换运算符，或者无法调用该运算符
+c:\users\hasee\desktop\compiler\complier\dag.cpp(58): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(64): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(67): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(70): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(72): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(73): error C3536: “dnRest”: 初始化之前无法使用
+c:\users\hasee\desktop\compiler\complier\dag.cpp(74): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(76): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(78): error C2678: 二进制“==”: 没有找到接受“tag”类型的左操作数的运算符(或没有可接受的转换)
+  e:\visual studio 2017\vc\tools\msvc\14.16.27023\include\system_error(284): note: 可能是“bool std::operator ==(const std::error_condition &,const std::error_condition &) noexcept”
+  e:\visual studio 2017\vc\tools\msvc\14.16.27023\include\system_error(278): note: 或    “bool std::operator ==(const std::error_condition &,const std::error_code &) noexcept”
+  e:\visual studio 2017\vc\tools\msvc\14.16.27023\include\system_error(272): note: 或    “bool std::operator ==(const std::error_code &,const std::error_condition &) noexcept”
+  e:\visual studio 2017\vc\tools\msvc\14.16.27023\include\system_error(266): note: 或    “bool std::operator ==(const std::error_code &,const std::error_code &) noexcept”
+  e:\visual studio 2017\vc\tools\msvc\14.16.27023\include\exception(331): note: 或    “bool std::operator ==(const std::exception_ptr &,std::nullptr_t) noexcept”
+  e:\visual studio 2017\vc\tools\msvc\14.16.27023\include\exception(326): note: 或    “bool std::operator ==(std::nullptr_t,const std::exception_ptr &) noexcept”
+  e:\visual studio 2017\vc\tools\msvc\14.16.27023\include\exception(321): note: 或    “bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &) noexcept”
+  c:\users\hasee\desktop\compiler\complier\dag.cpp(78): note: 或    “内置 C++ operator==(const char [2], const char [2])”
+  c:\users\hasee\desktop\compiler\complier\dag.cpp(78): note: 尝试匹配参数列表“(tag, const char [2])”时
+c:\users\hasee\desktop\compiler\complier\dag.cpp(81): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(82): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(85): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(88): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(90): error C3536: “dnRes”: 初始化之前无法使用
+c:\users\hasee\desktop\compiler\complier\dag.cpp(91): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(93): error C2039: “res”: 不是“quaternary”的成员
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(9): note: 参见“quaternary”的声明
+c:\users\hasee\desktop\compiler\complier\dag.cpp(159): warning C4244: “return”: 从“__int64”转换到“int”，可能丢失数据
+c:\users\hasee\desktop\compiler\complier\dag.cpp(170): error C2065: “none”: 未声明的标识符
+c:\users\hasee\desktop\compiler\complier\dag.cpp(170): error C2440: “<function-style-cast>”: 无法从“initializer list”转换为“quaternary”
+  c:\users\hasee\desktop\compiler\complier\dag.cpp(170): note: 无构造函数可以接受源类型，或构造函数重载决策不明确
+c:\users\hasee\desktop\compiler\complier\dag.cpp(183): error C3861: “isBinary”: 找不到标识符
+c:\users\hasee\desktop\compiler\complier\dag.cpp(183): error C2672: “isBinary”: 未找到匹配的重载函数
+c:\users\hasee\desktop\compiler\complier\dag.cpp(187): error C2440: “<function-style-cast>”: 无法从“initializer list”转换为“quaternary”
+  c:\users\hasee\desktop\compiler\complier\dag.cpp(187): note: 无构造函数可以接受源类型，或构造函数重载决策不明确
+c:\users\hasee\desktop\compiler\complier\dag.cpp(189): error C3861: “isUnary”: 找不到标识符
+c:\users\hasee\desktop\compiler\complier\dag.cpp(189): error C2672: “isUnary”: 未找到匹配的重载函数
+c:\users\hasee\desktop\compiler\complier\dag.cpp(190): error C2065: “none”: 未声明的标识符
+c:\users\hasee\desktop\compiler\complier\dag.cpp(190): error C2440: “<function-style-cast>”: 无法从“initializer list”转换为“quaternary”
+  c:\users\hasee\desktop\compiler\complier\dag.cpp(190): note: 无构造函数可以接受源类型，或构造函数重载决策不明确
+c:\users\hasee\desktop\compiler\complier\dag.cpp(198): error C2065: “none”: 未声明的标识符
+c:\users\hasee\desktop\compiler\complier\dag.cpp(198): error C2440: “<function-style-cast>”: 无法从“initializer list”转换为“quaternary”
+  c:\users\hasee\desktop\compiler\complier\dag.cpp(198): note: 无构造函数可以接受源类型，或构造函数重载决策不明确
+  dagnode.cpp
+c:\users\hasee\desktop\compiler\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\dagnode.cpp(37): warning C4244: “return”: 从“__int64”转换到“int”，可能丢失数据
+  grammatical_analyzer.cpp
+c:\users\hasee\desktop\compiler\complier\grammatical_analyzer.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\grammatical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  LL.cpp
+c:\users\hasee\desktop\compiler\complier\ll.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\ll.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  main.cpp
 c:\users\hasee\desktop\compiler\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
 c:\users\hasee\desktop\compiler\complier\grammatical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
 c:\users\hasee\desktop\compiler\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-  complier.vcxproj -> C:\Users\hasee\Desktop\compiler\x64\Debug\complier.exe
+  semantic_analyzer.cpp
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(175): error C2039: “getItemType”: 不是“Symbol”的成员
+  c:\users\hasee\desktop\compiler\complier\symbol.h(197): note: 参见“Symbol”的声明
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(219): error C2039: “getItemType”: 不是“Symbol”的成员
+  c:\users\hasee\desktop\compiler\complier\symbol.h(197): note: 参见“Symbol”的声明
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(237): error C2046: 非法的 case
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(262): error C2046: 非法的 case
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(286): error C2046: 非法的 case
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(291): error C2046: 非法的 case
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(304): error C2046: 非法的 case
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(306): error C2046: 非法的 case
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(335): error C2046: 非法的 case
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(355): error C2046: 非法的 case
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(236): error C2043: 非法 break
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(261): error C2043: 非法 break
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(285): error C2043: 非法 break
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(290): error C2043: 非法 break
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(303): error C2043: 非法 break
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(305): error C2043: 非法 break
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(334): error C2043: 非法 break
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(353): error C2043: 非法 break
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(382): error C2059: 语法错误:“break”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(383): error C2059: 语法错误:“case”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(384): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(445): error C2059: 语法错误:“break”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(446): error C2059: 语法错误:“case”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(447): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(483): error C2059: 语法错误:“break”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(484): error C2059: 语法错误:“case”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(485): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(502): error C2059: 语法错误:“break”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(503): error C2059: 语法错误:“case”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(504): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(513): error C2059: 语法错误:“break”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(514): error C2059: 语法错误:“case”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(515): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(1015): warning C4138: 在注释外找到“*/”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(1164): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(2080): error C2059: 语法错误:“}”
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(2080): error C2143: 语法错误: 缺少“;”(在“}”的前面)
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(2083): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(2083): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(2330): error C2084: 函数“bool isBinary(tag)”已有主体
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(22): note: 参见“isBinary”的前一个定义
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(2338): error C2084: 函数“bool isUnary(tag)”已有主体
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(23): note: 参见“isUnary”的前一个定义
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(2345): error C2084: 函数“bool isExchangeable(tag)”已有主体
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(24): note: 参见“isExchangeable”的前一个定义
+c:\users\hasee\desktop\compiler\complier\semantic_analyzer.cpp(2353): error C2084: 函数“bool isJump(tag)”已有主体
+  c:\users\hasee\desktop\compiler\complier\semantic_analyzer.h(25): note: 参见“isJump”的前一个定义
+  symbol.cpp
+c:\users\hasee\desktop\compiler\complier\symbol.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\symbol.cpp(291): error C2084: 函数“Node::Node(void)”已有主体
+  c:\users\hasee\desktop\compiler\complier\symbol.h(254): note: 参见“{ctor}”的前一个定义
+  test.cpp
+c:\users\hasee\desktop\compiler\complier\test.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\grammatical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\compiler\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  正在生成代码...

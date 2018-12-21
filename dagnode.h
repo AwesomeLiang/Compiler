@@ -14,7 +14,7 @@ class DagNode {
 private:
 	Node identifier; // 主标识符
 	vector<Node> addtionalTable; // 标识符表（可以是空），不允许是常数
-	string operand; // 运算符
+	tag operand; // 运算符
 
 	shared_ptr<DagNode> leftSon;
 	shared_ptr<DagNode> rightSon;
@@ -36,7 +36,7 @@ public:
 
 	DagNode(Node identifier, shared_ptr<DagNode> leftSon, shared_ptr<DagNode> rightSon)
 		: identifier(identifier), leftSon(leftSon), rightSon(rightSon), id(currentId++) {}
-	DagNode(Node identifier, string op, shared_ptr<DagNode> leftSon, shared_ptr<DagNode> rightSon)
+	DagNode(Node identifier, tag op, shared_ptr<DagNode> leftSon, shared_ptr<DagNode> rightSon)
 		: identifier(identifier), operand(op), leftSon(leftSon), rightSon(rightSon), id(currentId++) {}
 
 
@@ -49,7 +49,7 @@ public:
 
 	Node getIdentifier() { return identifier; }
 	int getId() { return id; }
-	string getOp() { return operand; }
+	tag getOp() { return operand; }
 	shared_ptr<DagNode> getLeftSon() { return leftSon; }
 	shared_ptr<DagNode> getRightSon() { return rightSon; }
 	vector<Node> getTable() { return addtionalTable; }

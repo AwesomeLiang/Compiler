@@ -1247,6 +1247,7 @@ void testNode() {
 
 void testDagNode() {
 	Node a("a", v), b("b", v), c("c", v), d("d", v), x("x", v), y("y", v);
+
 	DagNode dn1(a, NULL, NULL);
 	DagNode dn2 = dn1;
 	//DagNode* dn_ptr = &dn1;

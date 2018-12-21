@@ -10,7 +10,7 @@ int DagNode::currentId;
 
 
 ostream& operator<<(ostream& out, const DagNode& dn) {
-	if (dn.operand != "") {
+	if (dn.operand) {
 		out << dn.operand << " ";
 	}
 	out << dn.id << ": " << dn.identifier << "|";

@@ -26,7 +26,6 @@ struct quaternary
 
   friend ostream& operator<<(ostream& os, const quaternary& qd);
 
-
   quaternary(tag op, Node arg1, Node arg2, Node res) : op(op), arg1(arg1), arg2(arg2), result (res) {
 	  activeArg1 = false;
 	  activeArg2 = false;

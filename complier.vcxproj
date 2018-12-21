@@ -112,6 +112,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dag.cpp" />
     <ClCompile Include="dagnode.cpp" />
     <ClCompile Include="grammatical_analyzer.cpp" />
     <ClCompile Include="lexical_analyzer.cpp" />
@@ -123,6 +124,7 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dag.h" />
     <ClInclude Include="dagnode.h" />
     <ClInclude Include="grammatical_analyzer.h" />
     <ClInclude Include="lexical_analyzer.h" />

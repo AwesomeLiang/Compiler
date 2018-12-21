@@ -29,25 +29,25 @@ void Dag::init(vector<quaternary> block) {
 			shared_ptr<DagNode> dnPtr = find(qd.op, *dnArg1, *dnArg2);
 			shared_ptr<DagNode> dnode;
 			if (!dnPtr) {
-				dnode = make_shared<DagNode>(DagNode(qd.res, qd.op, dnArg1, dnArg2));
+				dnode = make_shared<DagNode>(DagNode(qd.result, qd.op, dnArg1, dnArg2));
 				insert(dnode);
 			}
 			else {
 				dnode = dnPtr;
 			}
-			if (qd.res.isVar() && dnode->getIdentifier().isTempVar()) {
+			if (qd.result.isVar() && dnode->getIdentifier().isTempVar()) {
 				auto node = dnode->getIdentifier();
 				dnode->insert(node);
-				dnode->setIdentifier(qd.res);
+				dnode->setIdentifier(qd.result);
 			}
 			else {
-				dnode->insert(qd.res);
+				dnode->insert(qd.result);
 			}
-			auto dnRest = getDagNode(qd.res);
+			auto dnRest = getDagNode(qd.result);
 			if (dnRest) {
-				dnRest->remove(qd.res);
+				dnRest->remove(qd.result);
 			}
-			nodeMap[qd.res] = dnode;
+			nodeMap[qd.result] = dnode;
 		}
 		else if (isUnary(qd.op)) {
 			//cout << "#2" << endl;
@@ -55,42 +55,42 @@ void Dag::init(vector<quaternary> block) {
 			shared_ptr<DagNode> dnPtr = find(qd.op, *dnArg1);
 			shared_ptr<DagNode> dnode;
 			if (!dnPtr) {
-				dnode = make_shared<DagNode>(DagNode(qd.res, qd.op, dnArg1, nullptr));
+				dnode = make_shared<DagNode>(DagNode(qd.result, qd.op, dnArg1, nullptr));
 				insert(dnode);
 			}
 			else {
 				dnode = dnPtr;
 			}
-			if (qd.res.isVar() && dnode->getIdentifier().isTempVar()) {
+			if (qd.result.isVar() && dnode->getIdentifier().isTempVar()) {
 				auto node = dnode->getIdentifier();
 				dnode->insert(node);
-				dnode->setIdentifier(qd.res);
+				dnode->setIdentifier(qd.result);
 			}
 			else {
-				dnode->insert(qd.res);
+				dnode->insert(qd.result);
 			}
-			auto dnRest = getDagNode(qd.res);
+			auto dnRest = getDagNode(qd.result);
 			if (dnRest) {
-				dnRest->remove(qd.res);
+				dnRest->remove(qd.result);
 			}
-			nodeMap[qd.res] = dnode;
+			nodeMap[qd.result] = dnode;
 		}
-		else if (qd.op == "=") {
+		else if (qd.op == ASSIGN) {
 			//cout << "#3" << endl;
 			auto dnArg1 = getDagNode(qd.arg1);
-			auto dnRes = getDagNode(qd.res);
-			if (qd.res.isVar() && dnArg1->getIdentifier().isTempVar()) {
+			auto dnRes = getDagNode(qd.result);
+			if (qd.result.isVar() && dnArg1->getIdentifier().isTempVar()) {
 				auto node = dnArg1->getIdentifier();
 				dnArg1->insert(node);
-				dnArg1->setIdentifier(qd.res);
+				dnArg1->setIdentifier(qd.result);
 			}
 			else {
-				dnArg1->insert(qd.res);
+				dnArg1->insert(qd.result);
 			}
 			if (dnRes) {
-				dnRes->remove(qd.res);
+				dnRes->remove(qd.result);
 			}
-			nodeMap[qd.res] = dnArg1;
+			nodeMap[qd.result] = dnArg1;
 		}
 		//show(); // debug”√
 	}
@@ -114,7 +114,7 @@ void Dag::insert(shared_ptr<DagNode> &nd) {
 	container.push_back(nd);
 }
 
-shared_ptr<DagNode> Dag::find(string op, DagNode& dnArg1, DagNode& dnArg2) {
+shared_ptr<DagNode> Dag::find(tag op, DagNode& dnArg1, DagNode& dnArg2) {
 	shared_ptr<DagNode> dgPtr = nullptr;
 	for (auto nodeIter = container.begin(); nodeIter != container.end(); ++nodeIter) {
 		if ((*nodeIter)->getOp() == op && *((*nodeIter)->getLeftSon()) == dnArg1 && *((*nodeIter)->getRightSon()) == dnArg2) {
@@ -129,7 +129,7 @@ shared_ptr<DagNode> Dag::find(string op, DagNode& dnArg1, DagNode& dnArg2) {
 	return dgPtr;
 }
 
-shared_ptr<DagNode> Dag::find(string op, DagNode dnArg1) {
+shared_ptr<DagNode> Dag::find(tag op, DagNode dnArg1) {
 	shared_ptr<DagNode> dgPtr = nullptr;
 	for (auto nodeIter = container.begin(); nodeIter != container.end(); ++nodeIter) {
 		if ((*nodeIter)->getOp() == op && *((*nodeIter)->getLeftSon()) == dnArg1) {
@@ -167,7 +167,7 @@ vector<quaternary> Dag::regenerate(vector<quaternary> block) {
 		if (dnode->isLeaf() && !(dnode->empty())) {
 			for (auto addnode : dnode->getTable()) {
 				if (addnode.isVar() && addnode != dnode->getIdentifier()) {
-					v.push_back(quaternary("=", dnode->getIdentifier(), Node(string("none"), none), addnode));
+					v.push_back(quaternary(ASSIGN, dnode->getIdentifier(), Node(), addnode));
 				}
 				else {
 					//cout << dnode->getIdentifier();
@@ -183,11 +183,11 @@ vector<quaternary> Dag::regenerate(vector<quaternary> block) {
 			if (leftSon && rightSon && isBinary(op)) { // 
 				Node arg1 = leftSon->getIdentifier();
 				Node arg2 = rightSon->getIdentifier();
-				Node res = dnode->getIdentifier();
-				v.push_back(quaternary(op, arg1, arg2, res));
+				Node result = dnode->getIdentifier();
+				v.push_back(quaternary(op, arg1, arg2, result));
 			}
 			else if (leftSon && isUnary(op)) {
-				v.push_back(quaternary(op, leftSon->getIdentifier(), Node(string("none"), none), dnode->getIdentifier()));
+				v.push_back(quaternary(op, leftSon->getIdentifier(), Node(), dnode->getIdentifier()));
 			}
 			else {
 				//cout << *leftSon << *rightSon << op;
@@ -195,7 +195,7 @@ vector<quaternary> Dag::regenerate(vector<quaternary> block) {
 			for (auto addnode : dnode->getTable()) {
 				if (addnode.isVar()) {
 					if (addnode != dnode->getIdentifier()) {
-						v.push_back(quaternary("=", dnode->getIdentifier(), Node(string("none"), none), addnode));
+						v.push_back(quaternary(ASSIGN, dnode->getIdentifier(), Node(), addnode));
 					}
 				}
 			}

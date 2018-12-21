@@ -42,6 +42,9 @@
     <ClCompile Include="dagnode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="dag.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LL.h">
@@ -63,6 +66,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="dagnode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dag.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

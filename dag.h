@@ -27,8 +27,8 @@ public:
 	shared_ptr<DagNode> getDagNode(Node &n);
 	void insert(shared_ptr<DagNode>& nd);
 	int find(shared_ptr<DagNode>&);
-	shared_ptr<DagNode> find(string, DagNode&, DagNode&);
-	shared_ptr<DagNode> find(string, DagNode);
+	shared_ptr<DagNode> find(tag, DagNode&, DagNode&);
+	shared_ptr<DagNode> find(tag, DagNode);
 	void show();
 	vector<quaternary> regenerate(vector<quaternary> block);
 

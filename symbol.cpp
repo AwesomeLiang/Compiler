@@ -287,10 +287,6 @@ Catalog Symbol::getIdCat(Index_4D index_id)
   return Catalog(table_id_3[index_id.indexDeep][index_id.indexFunc].table_id_1[index_id.indexItem].cat);
 }
 
-Node::Node()
-{
-
-}
 
 Node::Node(int kind, attribute att)
 {
