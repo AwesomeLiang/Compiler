@@ -13,7 +13,7 @@ typedef enum  {Int = 0/*int*/ ,Real = 1/*real*/ , Char = 2 /*char*/, String = 3/
 
 struct Index_4D
 {
-  int indexKind;
+  int indexKind = 1;
   int indexDeep;
   int indexFunc;
   int indexItem;
@@ -26,10 +26,17 @@ struct Node_Struct;
 struct Node_Param;
 struct Node_Type;
 
+struct Node_Array
+{
+  int low; //数组下界
+  int up;//数组上届
+  Index_4D ctp;//数组元素类型
+  int clen; // 数组元素长度
+};
 
 struct  TPoint
 {
-  vector<Node_Array>  point_array; // 用于多维数组
+  Node_Array  point_array; // 用于多维数组
   vector<Node_Struct> point_struct;//数组的单个元素是结构体
   int Void; // 数组的单个元素是int这类的基本类型  标记TPOINT是否指向空
 };
@@ -40,19 +47,7 @@ struct Node_Type
   TPoint tpoint; // 类型指针
 };
 
-
-
- struct Node_Array
-{
-  int low; //数组下界
-  int up;//数组上届
-  Node_Type *ctp;//数组元素类型
-  int clen; // 数组元素长度
-};
-
-
-
- struct Node_Struct
+struct Node_Struct
 {
   string dname; //结构的域名
   int offset;//区距
@@ -74,10 +69,6 @@ struct Node_Type
   vector<Node_Param> vparam; //指向函数形参表的指针
   int entry;//函数目标程序首地址（运行时填写）
 };
-
-
-
-
 
  typedef int Node_Num;
  typedef double Node_Real;
@@ -141,6 +132,8 @@ struct Node_Id_2
 typedef vector<Node_Id_2> Table_Id_2,Node_Id_3;
 typedef vector<Node_Id_3> Table_Id_3;
 
+
+
 struct attribute
 {
   tag attributeKey;
@@ -160,7 +153,6 @@ class Symbol
 {
 public:
   Table_Id_3 table_id_3; // 这是一个三维表，第一维是deep，第二维func , 第三维item
-  vector<Node_Array> table_array;
   vector<Node_Num> table_num;
   vector<Node_Real> table_real;
   vector<Node_Length> table_length;
@@ -172,8 +164,10 @@ public:
   vector<int> table_label;
   vector<tag> table_key;
   vector<vector<int>> table_link;
+  vector<Index_4D> table_array;
   Index_4D type;
   Catalog catalog;
+  Index_4D indexIdTemp;
   int offset;//用于计算域名区距
   int num_t;
   int num_f;
@@ -183,6 +177,7 @@ public:
   int index_item_now;
   int space[100]; //最多分配100层空间
   stack<Node_Id_1> stack_node_id;
+
   Symbol();
   void table_keyInit();
   void table_typeInit();
@@ -193,8 +188,14 @@ public:
   int findDnameLink (Index_4D index_arg);
   int findDname(string Dname);
   TVal getTVal(Index_4D index_arg1);
+  TPoint getTPoint(Index_4D index_arg1);
+  TVal getArrayTVal(Index_4D index_array);
+  int getItemType(Index_4D index_arg1);
+  Index_4D getIndexType(Index_4D index_arg1);
   Index_4D getIdIndexType(Index_4D index_id);
+  int getNum(Index_4D index_num);
   Catalog getIdCat(Index_4D index_id);
+
   int addressReturn;
 };
 class Node
@@ -209,10 +210,20 @@ public:
   type表类型为6
   link表类型为7
   参数类型为8
+  数组link类型为9
   */
   attribute attributeNode;
+  int length;
+  int offset;
   Node();
   Node(int kind, attribute att);
   void init(int kind, attribute att);
   void init(Index_4D index, Symbol symbol);
+  Node_Type getTypeNode(Index_4D index_type,Symbol symbol);
+  
 };
+
+
+
+
+

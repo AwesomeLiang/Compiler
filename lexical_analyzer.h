@@ -30,7 +30,7 @@ typedef enum
   RETURN = 289, SEMICOLON = 290,/*分号';' */ COMMA = 291/*逗号*/, LBP = 292, RBP = 293,
   CHAR = 294, STRING = 295, CH = 296, ADD = 297, SUB = 298, INCLUDE = 299, POINT = 300,
   MUL = 301, DIV = 302, FINISH = 303, GOTO = 304, VOID = 305, STRUCT = 306, CALL = 307,
-  PARAM = 308, LABEL = 309
+  PARAM = 308, LABEL = 309, SHIFT = 310
   //每次新加入关键字都需要在symbol的key里增加
 } tag;
  

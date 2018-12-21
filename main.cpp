@@ -30,6 +30,10 @@ causeIF Label 需要减少一个
 //左递归可能还有问题
 // Bool 类型的错误判断还没写  分隔符和关键字的类型需要区分吗？
 //在EXP中使用结构体成员还没实现，错误处理，以及offset还没检验
+//计算offset
+//四元式的空节点kind = -1   op改为tag
+//declare
+
 
 void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
 {
@@ -114,84 +118,95 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   c.push_back((tag)73);//73 SDec
   c.push_back((tag)74);//74 Dnamelist
   c.push_back((tag)75);//75 Dname
-  c.push_back((tag)76);//75 FDec
+  c.push_back((tag)76);//76 FDec
+  c.push_back((tag)77);//77 catA
+  c.push_back((tag)78);//78 useA
+  c.push_back((tag)79);//79 INUM
+  c.push_back((tag)80);//80 ArrDec
+  c.push_back((tag)81);//81 ArrVal
+
+
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
+
+
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
+  k.push_back(0);
 
   k.push_back(1);
   k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-  k.push_back(1);
-
-
   k.push_back(0);
   k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-  k.push_back(0);
-
   k.push_back(1);
   k.push_back(1);
-  k.push_back(0);
-  k.push_back(0);
+  k.push_back(1);
+  k.push_back(1);
+  k.push_back(1);
   k.push_back(1);
   k.push_back(1);
   k.push_back(1);
@@ -377,12 +392,13 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   g.push_back(temp_grammar);
 
 
-  // VarDec->VarDec  LB  INT  RB
+  // VarDec->ArrDec  catA LB  INUM  RB
   temp_grammar.clear();
   temp_grammar.push_back(8);
-  temp_grammar.push_back(8);
+  temp_grammar.push_back(80);
+  temp_grammar.push_back(77);
   temp_grammar.push_back(50);
-  temp_grammar.push_back(44);
+  temp_grammar.push_back(79);
   temp_grammar.push_back(51);
   g.push_back(temp_grammar);
 
@@ -685,10 +701,10 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   g.push_back(temp_grammar);
 
   
-  //LeftVal->LeftVal  LB  Add  RB
+  //LeftVal->ArrVal  LB  Add  RB
   temp_grammar.clear();
   temp_grammar.push_back(32);
-  temp_grammar.push_back(32);
+  temp_grammar.push_back(81);
   temp_grammar.push_back(50);
   temp_grammar.push_back(34);
   temp_grammar.push_back(51);
@@ -898,6 +914,54 @@ void test(vector<vector<int>> &g, vector<tag> &c, vector<int> &k)
   temp_grammar.push_back(46);
   g.push_back(temp_grammar);
 
+  //catA->VOID
+  temp_grammar.clear();
+  temp_grammar.push_back(77);
+  temp_grammar.push_back(41);
+  g.push_back(temp_grammar);
+
+  //useA->VOID
+  temp_grammar.clear();
+  temp_grammar.push_back(78);
+  temp_grammar.push_back(41);
+  g.push_back(temp_grammar);
+
+  //INUM->NUM
+  temp_grammar.clear();
+  temp_grammar.push_back(79);
+  temp_grammar.push_back(64);
+  g.push_back(temp_grammar);
+
+  //ArrDec->NUM
+  temp_grammar.clear();
+  temp_grammar.push_back(80);
+  temp_grammar.push_back(46);
+  g.push_back(temp_grammar);
+
+  // ArrDec->ArrDec  catA LB  INUM  RB
+  temp_grammar.clear();
+  temp_grammar.push_back(80);
+  temp_grammar.push_back(80);
+  temp_grammar.push_back(77);
+  temp_grammar.push_back(50);
+  temp_grammar.push_back(79);
+  temp_grammar.push_back(51);
+  g.push_back(temp_grammar);
+
+  //ArrVal->ArrVal  LB  Add  RB
+  temp_grammar.clear();
+  temp_grammar.push_back(81);
+  temp_grammar.push_back(81);
+  temp_grammar.push_back(50);
+  temp_grammar.push_back(34);
+  temp_grammar.push_back(51);
+  g.push_back(temp_grammar);
+
+  //ArrVal->ID
+  temp_grammar.clear();
+  temp_grammar.push_back(81);
+  temp_grammar.push_back(46);
+  g.push_back(temp_grammar);
 }
 void runLr()
 {
@@ -1126,7 +1190,7 @@ void readTable(map<index, key> &table, string filename,Parser parser)
 {
   
   ifstream fin(filename);
-  for (int i = 0; i <= 2123; ++i)
+  for (int i = 0; i <= 1891; ++i)
   {
     index temp_index;
     fin >> temp_index.state;
@@ -1147,11 +1211,10 @@ void readTable(map<index, key> &table, string filename,Parser parser)
 }
 
 
-
-
 int main()
 {
 
+  
   string str;
   str = readFileIntoString("test.txt");
   cout << str << endl;
@@ -1224,7 +1287,7 @@ int main()
   }
   */
   parser.infer.showSequence();
-  
+
   cout << "print table_link" << endl;
   for (int i = 0; i < (int)parser.infer.symbol.table_link.size(); ++i)
   {
@@ -1235,7 +1298,21 @@ int main()
     cout << endl;
   }
 
-  
+  cout << "printf table_type" << endl;
+  cout << "tval" << '\t' << "pointaddr"<<endl;
+  for (int i = 0; i < (int)parser.infer.symbol.table_type.size(); ++i)
+  {
+    parser.infer.symbol.show_TVal(parser.infer.symbol.table_type[i].tval);
+    cout << '\t';
+    if (parser.infer.symbol.table_type[i].tval == Array)
+    {
+      cout << parser.infer.symbol.table_type[i].tpoint.point_array.ctp.indexItem;
+    }
+    cout << endl;
+  }
+
+
+
   getchar();
   return 0;
 }

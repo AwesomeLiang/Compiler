@@ -47,7 +47,7 @@ void Symbol::table_typeInit()
 
 void Symbol::table_keyInit()
 {
-  for (int i = 256; i <= 309; ++i)
+  for (int i = 256; i <= 310; ++i)
   {
     table_key.push_back((tag)i);
   }
@@ -235,6 +235,57 @@ TVal Symbol::getTVal(Index_4D index_arg1)
   if (index_arg1.indexKind == 3)
   {
     pos1 = table_id_3[index_arg1.indexDeep][index_arg1.indexFunc].table_id_1[index_arg1.indexItem].point_type.indexItem;
+    
+  }
+  else if (index_arg1.indexKind == 4)
+  {
+    //操作数1是常整数
+    for (int i = 0; i < (int)table_type.size(); ++i)
+    {
+      if (table_type[i].tval == Int)
+      {
+        pos1 = i;
+        break;
+      }
+    }
+
+  }
+  else if (index_arg1.indexKind == 5)
+  {
+    //操作数1是常实数
+    for (int i = 0; i < (int)table_type.size(); ++i)
+    {
+      if (table_type[i].tval == Real)
+      {
+        pos1 = i;
+        break;
+      }
+    }
+  }
+  else if (index_arg1.indexKind == 7)
+  {
+    pos1 = findDnameLink(index_arg1);
+    if (pos1 != 0 && pos1 != 1)
+      cout << " getIdTVal-------------arg type error" << endl;
+  }
+  else if (index_arg1.indexKind == 9)
+  {
+    cout << "TVal Symbol::getTVal(Index_4D index_arg1)         indexKind == 9  hasn't completed" << endl;
+    return getArrayTVal(index_arg1);
+  }
+  else
+  {
+    //error;
+  }
+  return TVal(table_type[pos1].tval);
+}
+
+TPoint Symbol::getTPoint(Index_4D index_arg1)
+{
+  int pos1;
+  if (index_arg1.indexKind == 3)
+  {
+    pos1 = table_id_3[index_arg1.indexDeep][index_arg1.indexFunc].table_id_1[index_arg1.indexItem].point_type.indexItem;
     if (pos1 != 0 && pos1 != 1)
       cout << " getIdTVal-------------arg type error" << endl;
   }
@@ -273,13 +324,130 @@ TVal Symbol::getTVal(Index_4D index_arg1)
   {
     //error;
   }
-  return TVal(table_type[pos1].tval);
+  return TPoint(table_type[pos1].tpoint);
+}
+
+TVal Symbol::getArrayTVal(Index_4D index_array)
+{/*
+ while (getIndexTVal(index_array) == Array)
+ {
+ index_array = getTPoint(index_array).point_array.ctp;
+ }
+ return TVal(getIndexTVal(index_array));
+ */
+  
+  return TVal();
+}
+
+int Symbol::getItemType(Index_4D index_arg1)
+{
+  int pos1 = -1;
+  if (index_arg1.indexKind == 3)
+  {
+    pos1 = table_id_3[index_arg1.indexDeep][index_arg1.indexFunc].table_id_1[index_arg1.indexItem].point_type.indexItem;
+    if (pos1 != 0 && pos1 != 1)
+      cout << " getItemType-------------arg type error" << endl;
+  }
+  else if (index_arg1.indexKind == 4)
+  {
+    //操作数1是常整数
+    for (int i = 0; i < (int)table_type.size(); ++i)
+    {
+      if (table_type[i].tval == Int)
+      {
+        pos1 = i;
+        break;
+      }
+    }
+
+  }
+  else if (index_arg1.indexKind == 5)
+  {
+    //操作数1是常实数
+    for (int i = 0; i < (int)table_type.size(); ++i)
+    {
+      if (table_type[i].tval == Real)
+      {
+        pos1 = i;
+        break;
+      }
+    }
+  }
+  else if (index_arg1.indexKind == 7)
+  {
+    pos1 = findDnameLink(index_arg1);
+    if (pos1 != 0 && pos1 != 1)
+      cout << " getIdTVal-------------arg type error" << endl;
+  }
+  else
+  {
+    //error;
+  }
+  return pos1;
+}
+
+Index_4D Symbol::getIndexType(Index_4D index_arg1)
+{
+  Index_4D index_type;
+  index_type.indexDeep = -1;
+  index_type.indexFunc = -1;
+  index_type.indexKind = 6;
+  int pos1 = -1;
+  if (index_arg1.indexKind == 3)
+  {
+    pos1 = table_id_3[index_arg1.indexDeep][index_arg1.indexFunc].table_id_1[index_arg1.indexItem].point_type.indexItem;
+    if (pos1 != 0 && pos1 != 1)
+      cout << " getIndexType-------------arg type error" << endl;
+  }
+  else if (index_arg1.indexKind == 4)
+  {
+    //操作数1是常整数
+    for (int i = 0; i < (int)table_type.size(); ++i)
+    {
+      if (table_type[i].tval == Int)
+      {
+        pos1 = i;
+        break;
+      }
+    }
+
+  }
+  else if (index_arg1.indexKind == 5)
+  {
+    //操作数1是常实数
+    for (int i = 0; i < (int)table_type.size(); ++i)
+    {
+      if (table_type[i].tval == Real)
+      {
+        pos1 = i;
+        break;
+      }
+    }
+  }
+  else if (index_arg1.indexKind == 7)
+  {
+    pos1 = findDnameLink(index_arg1);
+    if (pos1 != 0 && pos1 != 1)
+      cout << " getIdTVal-------------arg type error" << endl;
+  }
+  else
+  {
+    //error;
+  }
+  index_type.indexItem = pos1;
+  return Index_4D(index_type);
 }
 
 Index_4D Symbol::getIdIndexType(Index_4D index_id)
 {
 
   return Index_4D(table_id_3[index_id.indexDeep][index_id.indexFunc].table_id_1[index_id.indexItem].point_type);
+}
+
+int Symbol::getNum(Index_4D index_num)
+{
+  return table_num[index_num.indexItem];
+  
 }
 
 Catalog Symbol::getIdCat(Index_4D index_id)
@@ -294,6 +462,8 @@ Node::Node()
 
 Node::Node(int kind, attribute att)
 {
+  
+  kindNode = kind;
   switch (kind)
   {
   case 0:
@@ -335,6 +505,7 @@ Node::Node(int kind, attribute att)
 
 void Node::init(int kind, attribute att)
 {
+  kindNode = kind;
   switch (kind)
   {
   case 0:
@@ -415,6 +586,12 @@ void Node::init(Index_4D index,Symbol symbol)
     break;
   }
 }
+
+Node_Type Node::getTypeNode(Index_4D index_type,Symbol symbol)
+{
+  return symbol.table_type[index_type.indexItem];
+}
+
 
 
 
