@@ -1,0 +1,8 @@
+﻿  semantic_analyzer.cpp
+c:\users\hasee\desktop\complier\complier\semantic_analyzer.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\complier\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\complier\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\complier\complier\semantic_analyzer.cpp(1057): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\complier\complier\semantic_analyzer.cpp(2044): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  complier.vcxproj -> C:\Users\hasee\Desktop\complier\Debug\complier.exe
+  complier.vcxproj -> C:\Users\hasee\Desktop\complier\Debug\complier.pdb (Partial PDB)

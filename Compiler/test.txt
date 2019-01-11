@@ -1,0 +1,26 @@
+int x;
+struct p {int b[2]; int e;};
+
+int func(int x, int y) {
+	return x + y;
+}
+int main()
+{	
+	struct p m;
+
+	int i;
+	int a = 10;
+	int b = 5;
+	int c = 2*a+5;
+	b = c;
+	a = b;
+	m.e = 1;
+	if(c) {
+		c = a + 1;
+	}
+
+	i = func(1, 2); //
+
+	return 0;
+}
+#

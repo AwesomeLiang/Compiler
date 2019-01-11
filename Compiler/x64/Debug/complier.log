@@ -1,0 +1,14 @@
+﻿  assembler.cpp
+c:\users\hasee\desktop\comp1\complier\symbol.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\comp1\complier\lexical_analyzer.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\hasee\desktop\comp1\complier\assembler.cpp(52): warning C4244: “return”: 从“__int64”转换到“int”，可能丢失数据
+c:\users\hasee\desktop\comp1\complier\assembler.cpp(62): warning C4244: “return”: 从“__int64”转换到“int”，可能丢失数据
+c:\users\hasee\desktop\comp1\complier\assembler.cpp(89): warning C4244: “return”: 从“__int64”转换到“int”，可能丢失数据
+c:\users\hasee\desktop\comp1\complier\assembler.cpp(98): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+c:\users\hasee\desktop\comp1\complier\assembler.cpp(134): warning C4804: “~”: 在操作中使用类型“bool”不安全
+c:\users\hasee\desktop\comp1\complier\assembler.cpp(478): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+c:\users\hasee\desktop\comp1\complier\assembler.cpp(521): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+c:\users\hasee\desktop\comp1\complier\assembler.cpp(687): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+c:\users\hasee\desktop\comp1\complier\assembler.cpp(718): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+c:\users\hasee\desktop\comp1\complier\assembler.cpp(746): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  complier.vcxproj -> C:\Users\hasee\Desktop\comp1\x64\Debug\complier.exe

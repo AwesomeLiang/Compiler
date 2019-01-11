@@ -1,0 +1,24 @@
+digraph
+{
+node [fontsize=12, font=Courier, shape=plaintext]
+node_0 [label="[6, constant]|[name: r cat: 4] [name: t4 cat: 7] "]
+node_1 [label="[name: R cat: 4]"]
+node_2 [label="297[name: t2 cat: 7]|[name: t2 cat: 7] [name: t5 cat: 7] "]
+node_3 [label="[name: t1 cat: 7]"]
+node_4 [label="301[name: a cat: 4]|[name: t3 cat: 7] "]
+node_5 [label=""]
+node_6 [label="315| [name: a cat: 4] "]
+node_7 [label="301[name: t6 cat: 7]|[name: t6 cat: 7] "]
+node_8 [label="298[name: t7 cat: 7]|[name: t7 cat: 7] "]
+node_9 [label="302[name: b cat: 4]|[name: t8 cat: 7] "]
+node_2 -> node_1
+node_2 -> node_0
+node_4 -> node_3
+node_4 -> node_2
+node_7 -> node_0
+node_7 -> node_2
+node_8 -> node_1
+node_8 -> node_0
+node_9 -> node_7
+node_9 -> node_8
+}

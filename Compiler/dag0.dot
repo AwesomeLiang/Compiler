@@ -1,0 +1,38 @@
+digraph
+{
+node [fontsize=12, font=Courier, shape=plaintext]
+node_0 [label="[name: x cat: 4]"]
+node_1 [label="313[name: x cat: 4]|  "]
+node_2 [label="[name: func cat: 0]"]
+node_3 [label="311[name: func cat: 0]|  "]
+node_4 [label="[name: y cat: 5]"]
+node_5 [label="297[name: t0 cat: 4]|[name: t0 cat: 4] "]
+node_6 [label="289[name: t0 cat: 4]|  "]
+node_7 [label=""]
+node_8 [label="312|  "]
+node_9 [label="[name: main cat: 0]"]
+node_10 [label="311[name: main cat: 0]|  "]
+node_11 [label="[name: m cat: 4]"]
+node_12 [label="314[name: m cat: 4]|  "]
+node_13 [label="[name: i cat: 4]"]
+node_14 [label="313[name: i cat: 4]|  "]
+node_15 [label="[name: a cat: 4]"]
+node_16 [label="313[name: a cat: 4]|  "]
+node_17 [label="[10, constant]"]
+node_18 [label="[name: b cat: 4]"]
+node_19 [label="313[name: b cat: 4]|  "]
+node_20 [label="[5, constant]"]
+node_21 [label="[name: c cat: 4]"]
+node_22 [label="313[name: c cat: 4]|  "]
+node_23 [label="[2, constant]"]
+node_24 [label="301[name: t1 cat: 4]|[name: t1 cat: 4] "]
+node_25 [label="297[name: t2 cat: 4]|[name: t2 cat: 4] [name: c cat: 4] [name: b cat: 4] [name: a cat: 4] "]
+node_26 [label="[1, constant]|[name: e cat: 3] "]
+node_27 [label="265[name: c cat: 4]|  "]
+node_5 -> node_0
+node_5 -> node_4
+node_24 -> node_23
+node_24 -> node_17
+node_25 -> node_24
+node_25 -> node_20
+}

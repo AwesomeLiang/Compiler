@@ -1,0 +1,9 @@
+digraph
+{
+node [fontsize=12, font=Courier, shape=plaintext]
+node_28 [label="[name: a cat: 4]"]
+node_29 [label="[1, constant]"]
+node_30 [label="297[name: t3 cat: 4]|[name: t3 cat: 4] [name: c cat: 4] "]
+node_30 -> node_28
+node_30 -> node_29
+}
